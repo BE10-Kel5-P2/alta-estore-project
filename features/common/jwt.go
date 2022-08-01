@@ -38,7 +38,8 @@ func ExtractData(c echo.Context) domain.User {
 
 	if res.Valid {
 		resClaim := res.Claims.(jwt.MapClaims)
-		userdata.ID = resClaim["ID"].(int)
+		parseID := resClaim["ID"].(float64)
+		userdata.ID = int(parseID)
 		userdata.Role = resClaim["Role"].(string)
 		return userdata
 	}

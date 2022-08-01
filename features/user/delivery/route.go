@@ -18,5 +18,7 @@ func RouteUser(e *echo.Echo, usr domain.UserHandler) {
 	// e.Pre(middleware.RemoveTrailingSlash())
 
 	e.POST("/login", usr.Login())
-	e.DELETE("/users/:id", usr.DeleteUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/users", usr.DeleteUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.POST("/users", usr.Register())
+	e.PUT("/users", usr.Update(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }

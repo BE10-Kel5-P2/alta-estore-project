@@ -2,10 +2,13 @@ package usecase
 
 import (
 	"errors"
+	"log"
 
 	"altaproject2/domain"
+	"altaproject2/features/user/data"
 
 	"github.com/go-playground/validator/v10"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userCase struct {
@@ -20,9 +23,23 @@ func New(ud domain.UserData, val *validator.Validate) domain.UserUseCase {
 	}
 }
 
-func (ud *userCase) Login(email string, password string) (username string, role string, token string, err error) {
-	username, role, token, err = ud.userData.Login(email, password)
-	return username, role, token, err
+func (ud *userCase) Login(userdata domain.User) (domain.User, error) {
+	login := ud.userData.Login(userdata)
+
+	if login.ID == 0 {
+		return domain.User{}, errors.New("no data")
+	}
+
+	hashpw := ud.userData.GetPasswordData(userdata.Username)
+
+	err := bcrypt.CompareHashAndPassword([]byte(hashpw), []byte(userdata.Password))
+
+	if err != nil {
+		log.Println(bcrypt.ErrMismatchedHashAndPassword, err)
+		return domain.User{}, err
+	}
+
+	return login, nil
 }
 
 func (ud *userCase) Delete(userId int) (bool, error) {
@@ -32,4 +49,70 @@ func (ud *userCase) Delete(userId int) (bool, error) {
 		return false, errors.New("failed to delete user")
 	}
 	return true, nil
+}
+
+// RegisterUser implements domain.UserUseCase
+func (ud *userCase) RegisterUser(newuser domain.User, cost int) int {
+	var user = data.FromModel(newuser)
+	validError := ud.valid.Struct(user)
+
+	if validError != nil {
+		log.Println("Validation errror : ", validError)
+		return 400
+	}
+
+	duplicate := ud.userData.CheckDuplicate(user.ToModel())
+
+	if duplicate {
+		log.Println("Duplicate Data")
+		return 400
+	}
+
+	hashed, hasherr := bcrypt.GenerateFromPassword([]byte(user.Password), cost)
+
+	if hasherr != nil {
+		log.Println("Cant encrypt: ", hasherr)
+		return 500
+	}
+	user.Password = string(hashed)
+	user.Role = "user"
+	insert := ud.userData.RegisterData(user.ToModel())
+
+	if insert.ID == 0 {
+		log.Println("Empty data")
+		return 404
+	}
+
+	return 200
+}
+
+// UpdateUser implements domain.UserUseCase
+func (ud *userCase) UpdateUser(newuser domain.User, userid int, cost int) int {
+	var user = data.FromModel(newuser)
+
+	if userid == 0 {
+		log.Println("Data not found")
+		return 404
+	}
+
+	duplicate := ud.userData.CheckDuplicate(user.ToModel())
+
+	if duplicate {
+		log.Println("Duplicate Data")
+		return 400
+	}
+
+	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), cost)
+
+	if err != nil {
+		log.Println("Error encrypt password", err)
+		return 500
+	}
+
+	user.ID = uint(userid)
+	user.Password = string(hashed)
+
+	ud.userData.UpdateUserData(user.ToModel())
+
+	return 200
 }
