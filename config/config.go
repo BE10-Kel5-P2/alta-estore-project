@@ -15,6 +15,9 @@ type Appconfig struct {
 	Address  string
 	Port     int
 	DBName   string
+	Keys3    string
+	Secrets3 string
+	Regions3 string
 }
 
 var (
@@ -54,6 +57,8 @@ func initConfig() *Appconfig {
 
 	defaultconfig.Port = port
 	defaultconfig.DBName = os.Getenv("DBName")
-
+	defaultconfig.Keys3 = os.Getenv("Keys3")
+	defaultconfig.Secrets3 = os.Getenv("Secrets3")
+	defaultconfig.Regions3 = os.Getenv("Regions3")
 	return &defaultconfig
 }

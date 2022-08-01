@@ -1,11 +1,9 @@
 package data
 
 import (
-	"fmt"
 	"log"
 
 	"altaproject2/domain"
-	"altaproject2/features/common"
 
 	"gorm.io/gorm"
 )
@@ -20,18 +18,16 @@ func New(db *gorm.DB) domain.UserData {
 	}
 }
 
-func (ud *userData) Login(email string, password string) (username string, role string, token string, err error) {
-	userData := User{}
-	ud.db.Where("email = ?", email).First(&userData)
-	check := common.CheckPasswordHash(password, userData.Password)
+func (ud *userData) Login(userdata domain.User) domain.User {
+	var user = FromModel(userdata)
+	err := ud.db.First(&user, "username  = ?", userdata.Username).Error
 
-	if !check {
-		return "", "", "", fmt.Errorf("error")
+	if err != nil {
+		log.Println("Cant login data", err.Error())
+		return domain.User{}
 	}
 
-	token = common.GenerateToken(domain.User(userData))
-
-	return userData.Username, userData.Role, token, nil
+	return user.ToModel()
 }
 
 func (ud *userData) Delete(userID int) bool {
@@ -46,4 +42,66 @@ func (ud *userData) Delete(userID int) bool {
 	}
 
 	return true
+}
+
+// RegisterData implements domain.UserData
+func (ud *userData) RegisterData(newuser domain.User) domain.User {
+	var user = FromModel(newuser)
+	err := ud.db.Create(&user).Error
+
+	if user.ID == 0 {
+		log.Println("Invalid ID")
+		return domain.User{}
+	}
+
+	if err != nil {
+		log.Println("Cant create user object", err.Error())
+		return domain.User{}
+	}
+
+	return user.ToModel()
+}
+
+// UpdateUserData implements domain.UserData
+func (ud *userData) UpdateUserData(newuser domain.User) domain.User {
+	var user = FromModel(newuser)
+	err := ud.db.Model(&User{}).Where("ID = ?", user.ID).Updates(user)
+
+	if err.Error != nil {
+		log.Println("Cant update user object", err.Error.Error())
+		return domain.User{}
+	}
+
+	if err.RowsAffected == 0 {
+		log.Println("Data Not Found")
+		return domain.User{}
+	}
+
+	return user.ToModel()
+}
+
+// CheckDuplicate implements domain.UserData
+func (ud *userData) CheckDuplicate(newuser domain.User) bool {
+	var user User
+	err := ud.db.Find(&user, "username = ? OR email = ?", newuser.Username, newuser.Email)
+
+	if err.RowsAffected == 1 {
+		log.Println("Duplicated data", err.Error)
+		return true
+	}
+
+	return false
+}
+
+// GetPasswordData implements domain.UserData
+func (ud *userData) GetPasswordData(name string) string {
+	var user User
+	err := ud.db.Find(&user, "username = ?", name).Error
+
+	if err != nil {
+		log.Println("Cant retrieve user data", err.Error())
+		return ""
+	}
+
+	return user.Password
 }

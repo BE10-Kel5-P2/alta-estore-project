@@ -16,14 +16,22 @@ type User struct {
 type UserHandler interface {
 	Login() echo.HandlerFunc
 	DeleteUser() echo.HandlerFunc
+	Register() echo.HandlerFunc
+	Update() echo.HandlerFunc
 }
 
 type UserUseCase interface {
-	Login(Email string, password string) (username string, role string, token string, err error)
+	Login(userdata User) (User, error)
 	Delete(userID int) (bool, error)
+	RegisterUser(newuser User, cost int) int
+	UpdateUser(newuser User, userid, cost int) int
 }
 
 type UserData interface {
-	Login(email string, password string) (username string, role string, token string, err error)
+	Login(userdata User) User
 	Delete(userID int) bool
+	RegisterData(newuser User) User
+	UpdateUserData(newuser User) User
+	CheckDuplicate(newuser User) bool
+	GetPasswordData(name string) string
 }
