@@ -116,6 +116,8 @@ func (ud *userCase) UpdateUser(newuser domain.User, userid int, cost int) int {
 	ud.userData.UpdateUserData(user.ToModel())
 
 	return 200
+}
+
 func (ud *userCase) GetProfile(id int) (domain.User, error) {
 	data, err := ud.userData.GetProfile(id)
 

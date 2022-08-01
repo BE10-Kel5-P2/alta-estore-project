@@ -1,10 +1,10 @@
 package mysql
 
 import (
+	"altaproject2/config"
+	userdata "altaproject2/features/user/data"
 	"fmt"
 	"log"
-
-	"altaproject2/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,5 +24,5 @@ func InitDB(cfg *config.Appconfig) *gorm.DB {
 }
 
 func MigrateDB(db *gorm.DB) {
-	db.AutoMigrate()
+	db.AutoMigrate(userdata.User{})
 }

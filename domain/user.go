@@ -4,7 +4,6 @@ import "github.com/labstack/echo/v4"
 
 type User struct {
 	ID           int
-	Fullname     string
 	Username     string
 	Email        string
 	Address      string

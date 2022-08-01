@@ -104,6 +104,8 @@ func (ud *userData) GetPasswordData(name string) string {
 	}
 
 	return user.Password
+}
+
 func (ud *userData) GetProfile(userID int) (domain.User, error) {
 	var tmp User
 	err := ud.db.Where("ID = ?", userID).First(&tmp).Error
