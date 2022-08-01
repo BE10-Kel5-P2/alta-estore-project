@@ -18,6 +18,7 @@ type UserHandler interface {
 	DeleteUser() echo.HandlerFunc
 	Register() echo.HandlerFunc
 	Update() echo.HandlerFunc
+	GetProfile() echo.HandlerFunc
 }
 
 type UserUseCase interface {
@@ -25,6 +26,7 @@ type UserUseCase interface {
 	Delete(userID int) (bool, error)
 	RegisterUser(newuser User, cost int) int
 	UpdateUser(newuser User, userid, cost int) int
+	GetProfile(id int) (User, error)
 }
 
 type UserData interface {
@@ -34,4 +36,5 @@ type UserData interface {
 	UpdateUserData(newuser User) User
 	CheckDuplicate(newuser User) bool
 	GetPasswordData(name string) string
+	GetProfile(userID int) (User, error)
 }

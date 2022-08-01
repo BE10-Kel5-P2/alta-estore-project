@@ -104,4 +104,13 @@ func (ud *userData) GetPasswordData(name string) string {
 	}
 
 	return user.Password
+func (ud *userData) GetProfile(userID int) (domain.User, error) {
+	var tmp User
+	err := ud.db.Where("ID = ?", userID).First(&tmp).Error
+	if err != nil {
+		log.Println("There is a problem with data", err.Error())
+		return domain.User{}, err
+	}
+
+	return tmp.ToModel(), nil
 }

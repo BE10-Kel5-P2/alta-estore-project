@@ -7,6 +7,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
+
+	"altaproject2/domain"
+	"altaproject2/features/common"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/labstack/echo/v4"
@@ -197,6 +202,22 @@ func (us *userHandler) Update() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"code":    status,
 			"message": "Update success",
+func (uh *userHandler) GetProfile() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		usr := common.ExtractData(c)
+
+		data, err := uh.userUsecase.GetProfile(usr.ID)
+
+		if err != nil {
+			if strings.Contains(err.Error(), "profile data not found") {
+				return c.JSON(http.StatusNotFound, err.Error())
+			} else {
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+		return c.JSON(http.StatusFound, map[string]interface{}{
+			"message": "data found",
+			"data":    data,
 		})
 	}
 }

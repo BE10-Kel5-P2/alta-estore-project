@@ -1,0 +1,1017 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DianNurdiana-alt/E-STORE/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/lukmanhafidz/test/1.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Mercat API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Authentication
+    description: Authentication operation
+  - name: User
+    description: User operation
+  - name: Product
+    description: Product operation
+  - name: Cart
+    description: Cart operation
+  - name: Transaction
+    description: Transaction operation
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: user login
+      description:
+        fitur untuk login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserData'
+            example:
+              username: JohnKecoak
+              password: John123
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 200
+                message: Login success
+                data :
+                  token: $6jdl1DLncjapRndmVcOkdT724Nxcv
+                  username: JohnKecoak
+                  role: admin
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 400
+                message: Wrong username or password
+        '404':
+          $ref: "#/components/responses/404"
+        '500':
+          $ref: "#/components/responses/500"
+  /users: 
+    post:
+      tags:
+        - User
+      summary: user registration
+      description: fitur untuk register user
+      requestBody:
+         content:
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/UserData'
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/UserData'
+                example:
+                  photoprofile: jacob.jpg
+                  username: Jacob
+                  email: Jacob@alterra.id
+                  address: Jakarta
+                  password: jacob123
+      responses:
+        '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserData'
+                example:
+                  code: 200
+                  message: Register success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 400
+                message: Wrong input data
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    get:
+      tags:
+        - User
+      summary: my profile
+      description: fitur untuk menampilkan profil data user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                username: JohnKecoak
+                photoprofile: photo.jpg
+                data:
+                  - productname: Men'sShirt
+                    quantity: 2
+                    totalprice: IDR200.000
+                  - productname: Men'sBag
+                    quantity: 2
+                    totalprice: IDR400.000
+                code: 200
+                message: get data success
+        '404':
+          $ref: "#/components/responses/404"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    put:
+      tags:
+        - User
+      summary: update user profile
+      description: fitur untuk memperbarui profil data user
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/UserData'
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/UserData'
+                example:
+                  photoprofile: jacob.jpg
+                  username: Jacob
+                  email: Jacob@alterra.id
+                  address: Jakarta
+                  password: jacob123
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 200
+                message: Success update data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 400
+                message: Please enter data correctly
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    delete:
+      tags:
+        - User
+      summary: delete user account
+      description: fitur untuk menghapus akun user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 200
+                message: Success delete account
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /products:
+    get:
+      tags:
+      - Product
+      summary: display product data
+      description: fitur untuk menambahkan produk
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ProductData'
+              example:
+                data:
+                - productphoto: photo.jpg
+                  productname: Men'sBag
+                  price: IDR20.000
+                  stock: 5
+                  quantity: 1
+                - productphoto: photo.jpg
+                  productname: Men'sShirt
+                  price: IDR100.000
+                  stock: 5
+                  quantity: 1
+                - productphoto: photo.jpg
+                  productname: Men'sCap
+                  price: IDR15.000
+                  stock: 5
+                  quantity: 1
+                code: 200
+                message: Success get data
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    post:
+      tags:
+      - Product
+      summary: add product to cart
+      description: fitur untuk menambahkan item ke cart
+      security:
+       - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductData'
+              example:
+                - productphoto: photo.jpg
+                  productname: Men'sBag
+                  price: IDR20.000
+                  stock: 5
+                  quantity: 1
+                  subtotal: IDR100.000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 200
+                message: Success add product
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 404
+                message: Stock unavailable
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /products/admin:
+    post:
+      tags:
+      - Product
+      summary: add new product
+      description: fitur untuk menambahkan produk
+      security:
+       - bearerAuth: []
+      requestBody:
+        content:
+          multipart/formdata:
+            schema:
+              $ref: '#/components/schemas/ProductData'
+          application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+              example:
+                productid: 1
+                productphoto: photo.jpg
+                productname: Men's Bag
+                price: IDR20.000
+                stock: 5
+                quantity: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 200
+                message: Success add product
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 400
+                message: Please enter data correctly
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /products/admin/{productid}:
+    put:
+      tags:
+      - Product
+      summary: update product data
+      description: fitur untuk memperbarui data produk
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/formdata:
+            schema:
+              $ref: '#/components/schemas/ProductData'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserData'
+            example:
+              productphoto: photo.jpg
+              productname: Men's Bag
+              price: IDR20.000
+              stock: 5
+              quantity: 1        
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 200
+                message: Success update data product
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 400
+                message: Wrong input data product
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    delete:
+      tags:
+      - Product
+      summary: delete product data
+      description: fitur untuk menghapus data produk
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+              example: 
+                code: 200
+                message: Success delete product
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /products/{productid}:
+    get:
+      summary: ini fitur cari data user
+      description: Tampilkan data user sesuai username
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Product
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ProductData'
+              example:
+                productphoto: photo.jpg
+                productname: Men'sBag
+                price: IDR20.000
+                stock: 5
+                quantity: 1
+                description: ini adalah tas
+                code: 200
+                message: Success get data
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /carts:
+    post:
+      tags:
+        - Cart
+      summary: add product to shopping cart
+      description: fitur untuk memesan isi keranjang
+      security:
+        - bearerAuth: []
+      requestBody:
+         content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductData'
+              example:
+                - productphoto: Bag.jpg
+                  productname: Men's Bag
+                  price: IDR20.000
+                  stock: 5
+                  quantity: 1
+                  subtotal: IDR100.000
+                - productphoto: shoes.jpg
+                  productname: Men's shoes
+                  price: IDR20.000
+                  stock: 5
+                  quantity: 1
+                  subtotal: IDR100.000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 200
+                message: Success add product to shopping cart
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example: 
+                code: 404
+                message: Stock unavailable
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    get:
+      tags:
+        - Cart
+      summary: display shopping cart
+      description: fitur untuk menampilkan seluruh daftar produk yang ada dalam keranjang belanja
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductData'
+              example:
+                data:
+                - productphoto: photo.jpg
+                  productname: Men's Bag
+                  price: IDR20.000
+                  stock: 5
+                  quantity: 1
+                  subtotal: IDR100.000
+                - productphoto: photo.jpg
+                  productname: Men's Shirt
+                  price: IDR100.000
+                  stock: 5
+                  quantity: 2
+                  subtotal: IDR200.000
+                - productphoto: photo.jpg
+                  productname: Men's Cap
+                  price: IDR15.000
+                  stock: 4
+                  quantity: 1
+                  subtotal: IDR60.000
+                code: 200
+                message: get data success
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /carts/{productid}:
+    put:
+      tags:
+      - Cart
+      summary: update quantity product at shopping cart
+      description: fitur untuk memperbarui qty produk pada keranjang belanja
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/formdata:
+            schema:
+              $ref: '#/components/schemas/ProductData'
+            example:
+              product:
+                quantity: 2
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 200
+                message: Success update data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductData'
+              example:
+                code: 400
+                message: Wrong input data
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error   
+    delete:
+      tags:
+        - Cart
+      summary: delete product at shopping cart
+      description: fitur untuk menghapus produk yang ada dalam keranjang belanja
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 200
+                message: Success delete product
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /orders:
+    post:
+      tags:
+        - Order
+      summary: checkout shopping cart
+      description: fitur untuk checkout produk dalam keranjang belanja
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderData'
+            example:
+              productphoto: photo.jpg
+              productname: Men'sBag
+              price: IDR20.000
+              quantity: 5
+              totalprice: IDR100.000
+              address: Jl.Simatupang
+              paymentmethod: Ovo
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 200
+                message: Success checkout product
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderData'
+              example:
+                code: 400
+                message: Select product to be checkout
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+    get:
+      tags:
+        - Order
+      summary: display item checkout
+      description: fitur untuk menampilkan produk yang telah di checkout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderData'
+              example:
+                Transaction:
+                - productphoto: photo.jpg
+                  productname: Men'sBag
+                  unitprice: IDR20.000
+                  quantity: 5
+                  totalprice: IDR100.000
+                  address: Jl.Simatupang
+                  paymentmethod: Ovo
+                - productphoto: photo.jpg
+                  productname: Men'sShirt
+                  unitprice: IDR100.000
+                  quantity: 1
+                  totalprice: IDR100.000
+                  address: Jl.Pahlawan
+                  paymentmethod: Ovo
+                code: 200
+                message: get data success
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  /orders/{productid}:
+    delete:
+      tags:
+        - Order
+      summary: cancel checkout
+      description: fitur untuk menghapus produk yang telah di checkout
+      parameters:
+        - name: productid
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 200
+                message: Success delete data
+        '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+components:
+  schemas:
+    UserData:
+      type: object
+      properties:
+        photoprofile:
+          type: string
+          format: binary
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        password:
+          type: string
+          items:
+            $ref: '#/components/schemas/UserData'
+    ProductData:
+      type: object
+      properties:
+        productid:
+          type: integer
+        productphoto:
+          type: string
+          format: binary
+        productname:
+          type: string
+        price:
+          type: integer
+          format: int32
+        stock:
+          type: integer
+          format: int8
+        quantity:
+          type: integer
+          format: int8
+        description:
+          type: string
+          items:
+            $ref: '#/components/schemas/ProductData'
+    OrderData:
+      type: object
+      properties:
+        total:
+          type: integer
+        paymentmethod:
+          type: string
+        address:
+          type: string
+          items:
+            $ref: '#/components/schemas/OrderData'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: string
+          example: 
+            code: 200
+            message: Success
+    '404':
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 404
+                message: Data not found
+    '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: Internal server error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: JWT Authentication
+      scheme: bearer
+      bearerFormat: JWT
