@@ -200,3 +200,23 @@ func (us *userHandler) Update() echo.HandlerFunc {
 		})
 	}
 }
+
+func (uh *userHandler) GetProfile() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		usr := common.ExtractData(c)
+
+		data, err := uh.userUsecase.GetProfile(usr.ID)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "data found",
+			"data":    data,
+		})
+	}
+}

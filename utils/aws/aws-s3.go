@@ -40,7 +40,7 @@ func DoUpload(sess *session.Session, file multipart.FileHeader, filename string)
 
 	res, err := manager.Upload(
 		&s3manager.UploadInput{
-			Bucket:      aws.String("be10-file"),
+			Bucket:      aws.String("alta-project"),
 			ACL:         aws.String("public-read"),
 			ContentType: aws.String(http.DetectContentType(buffer)),
 			Key:         aws.String(filename),
@@ -51,6 +51,6 @@ func DoUpload(sess *session.Session, file multipart.FileHeader, filename string)
 		log.Info(res)
 		log.Error("Upload error : ", err)
 	}
-	link := fmt.Sprint("https://be10-file.s3.ap-southeast-1.amazonaws.com/", filename)
+	link := fmt.Sprint("https://alta-project.s3.ap-southeast-1.amazonaws.com/", filename)
 	return link
 }

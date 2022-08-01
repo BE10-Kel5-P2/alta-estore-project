@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type userCase struct {
@@ -115,4 +116,19 @@ func (ud *userCase) UpdateUser(newuser domain.User, userid int, cost int) int {
 	ud.userData.UpdateUserData(user.ToModel())
 
 	return 200
+}
+
+func (ud *userCase) GetProfile(id int) (domain.User, error) {
+	data, err := ud.userData.GetProfile(id)
+
+	if err != nil {
+		log.Println("Use case", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return domain.User{}, errors.New("data not found")
+		} else {
+			return domain.User{}, errors.New("server error")
+		}
+	}
+
+	return data, nil
 }
