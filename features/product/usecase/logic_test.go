@@ -102,17 +102,3 @@ func TestGetProduct(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
-
-func TestDeleteProduct(t *testing.T) {
-	repo := new(mocks.ProductData)
-
-	t.Run("Succes delete product", func(t *testing.T) {
-		repo.On("DeleteItemData", mock.Anything).Return(true).Once()
-		usecase := New(repo, validator.New())
-		delete, err := usecase.DeleteItemAdmin(1)
-
-		assert.Nil(t, err)
-		assert.Equal(t, true, delete)
-		repo.AssertExpectations(t)
-	})
-}
