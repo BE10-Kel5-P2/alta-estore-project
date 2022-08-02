@@ -24,8 +24,13 @@ func New(pd domain.ProductData, val *validator.Validate) domain.ProductUseCase {
 }
 
 // DeleteItemAdmin implements domain.ProductUseCase
-func (*productCase) DeleteItemAdmin() {
-	panic("unimplemented")
+func (pd *productCase) DeleteItemAdmin(productID int) (bool, error) {
+	res := pd.productData.DeleteItemData(productID)
+
+	if !res {
+		return false, errors.New("failed delete data")
+	}
+	return true, nil
 }
 
 // GetAllItems implements domain.ProductUseCase

@@ -71,7 +71,7 @@ func (us *userHandler) DeleteUser() echo.HandlerFunc {
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{
-				"code":    400,
+				"code":    404,
 				"message": "Data not found",
 			})
 		}

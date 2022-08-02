@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"net/http"
+	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/labstack/echo/v4"
@@ -81,16 +82,49 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 }
 
 // DeleteItem implements domain.ProductHandler
-func (*productHandler) DeleteItem() echo.HandlerFunc {
-	panic("unimplemented")
+func (ph *productHandler) DeleteItem() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := common.ExtractData(c)
+		if data.Role == "user" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": "Unauthorized",
+			})
+		}
+
+		id := c.Param("id")
+		cnv, _ := strconv.Atoi(id)
+
+		status, err := ph.productUseCase.DeleteItemAdmin(cnv)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+
+		if !status {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "Internal server error",
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "Success delete product",
+		})
+	}
 }
 
 // GetItem implements domain.ProductHandler
 func (ph *productHandler) GetItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		prd := common.ExtractData(c)
+		prd := c.Param("id")
+		id, _ := strconv.Atoi(prd)
 
-		data, err := ph.productUseCase.GetItemUser(prd.ID)
+		data, err := ph.productUseCase.GetItemUser(id)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{

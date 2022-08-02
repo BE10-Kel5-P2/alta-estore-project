@@ -18,8 +18,19 @@ func New(db *gorm.DB) domain.ProductData {
 }
 
 // DeleteItemData implements domain.ProductData
-func (*productData) DeleteItemData() {
-	panic("unimplemented")
+func (pd *productData) DeleteItemData(productID int) bool {
+	res := pd.db.Where("ID = ?", productID).Delete(&Product{})
+	if res.Error != nil {
+		log.Println("Cannot delete data", res.Error.Error())
+		return false
+	}
+
+	if res.RowsAffected < 1 {
+		log.Println("No data deleted", res.Error.Error())
+		return false
+	}
+
+	return true
 }
 
 // GetAllItemData implements domain.ProductData

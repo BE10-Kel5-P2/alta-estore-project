@@ -19,6 +19,7 @@ func RouteProduct(e *echo.Echo, ph domain.ProductHandler) {
 
 	e.GET("/products", ph.GetItems())
 	e.GET("/products/:id", ph.GetItem())
-	e.POST("/products", ph.PostItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
-	e.PUT("/products", ph.UpdateItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.POST("/admin/products", ph.PostItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.PUT("/admin/products", ph.UpdateItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/admin/products/:id", ph.DeleteItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }

@@ -25,7 +25,7 @@ type ProductUseCase interface {
 	GetAllItems() ([]Product, int)
 	PostItemAdmin(newProduct Product) int
 	UpdateItemAdmin(newProduct Product, productID int) int
-	DeleteItemAdmin()
+	DeleteItemAdmin(productID int) (bool, error)
 	GetItemUser(id int) (Product, error)
 }
 
@@ -33,6 +33,6 @@ type ProductData interface {
 	GetAllItemData() []Product
 	PostItemData(newProduct Product) Product
 	UpdateItemData(newProduct Product, productID int) Product
-	DeleteItemData()
+	DeleteItemData(productID int) bool
 	GetItemData(productID int) (Product, error)
 }
