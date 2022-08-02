@@ -3,9 +3,12 @@ package usecase
 import (
 	"altaproject2/domain"
 	"altaproject2/features/product/data"
+
+	"errors"
 	"log"
 
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
 type productCase struct {
@@ -26,18 +29,30 @@ func (*productCase) DeleteItemAdmin() {
 }
 
 // GetAllItems implements domain.ProductUseCase
-func (*productCase) GetAllItems() {
-	panic("unimplemented")
+func (pd *productCase) GetAllItems() ([]domain.Product, int) {
+	get := pd.productData.GetAllItemData()
+
+	if len(get) == 0 {
+		return nil, 404
+	}
+
+	return get, 200
 }
 
 // GetItemUser implements domain.ProductUseCase
-func (*productCase) GetItemUser() {
-	panic("unimplemented")
-}
+func (pd *productCase) GetItemUser(id int) (domain.Product, error) {
+	data, err := pd.productData.GetItemData(id)
 
-// PostCartUser implements domain.ProductUseCase
-func (*productCase) PostCartUser() {
-	panic("unimplemented")
+	if err != nil {
+		log.Println("Use case", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return domain.Product{}, errors.New("data not found")
+		} else {
+			return domain.Product{}, errors.New("server error")
+		}
+	}
+
+	return data, nil
 }
 
 // PostItemAdmin implements domain.ProductUseCase

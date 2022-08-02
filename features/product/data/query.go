@@ -23,18 +23,29 @@ func (*productData) DeleteItemData() {
 }
 
 // GetAllItemData implements domain.ProductData
-func (*productData) GetAllItemData() {
-	panic("unimplemented")
+func (pd *productData) GetAllItemData() []domain.Product {
+	var products []Product
+
+	err := pd.db.Find(&products)
+
+	if err.Error != nil {
+		log.Println("cant get all data from db", err.Error)
+		return nil
+	}
+
+	return ParseToArr(products)
 }
 
 // GetItemData implements domain.ProductData
-func (*productData) GetItemData() {
-	panic("unimplemented")
-}
+func (pd *productData) GetItemData(productID int) (domain.Product, error) {
+	var tmp Product
+	err := pd.db.Where("ID = ?", productID).First(&tmp).Error
+	if err != nil {
+		log.Println("There is a problem with data", err.Error())
+		return domain.Product{}, err
+	}
 
-// PostCartData implements domain.ProductData
-func (*productData) PostCartData() {
-	panic("unimplemented")
+	return tmp.ToModel(), nil
 }
 
 // PostItemData implements domain.ProductData

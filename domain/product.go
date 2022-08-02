@@ -10,31 +10,29 @@ type Product struct {
 	ProductPic  string
 	Stock       int
 	Qty         int
+	// Cart []Cart
 }
 
 type ProductHandler interface {
-	// GetItems() echo.HandlerFunc
-	// PostCart() echo.HandlerFunc
+	GetItems() echo.HandlerFunc
 	PostItem() echo.HandlerFunc
-	UpdateItem() echo.HandlerFunc
-	// DeleteItem() echo.HandlerFunc
-	// GetItem() echo.HandlerFunc
+  UpdateItem() echo.HandlerFunc
+	DeleteItem() echo.HandlerFunc
+	GetItem() echo.HandlerFunc
 }
 
 type ProductUseCase interface {
-	GetAllItems()
-	PostCartUser()
-	PostItemAdmin(newProduct Product) int
+	GetAllItems() ([]Product, int)
+  PostItemAdmin(newProduct Product) int
 	UpdateItemAdmin(newProduct Product, productID int) int
 	DeleteItemAdmin()
-	GetItemUser()
+	GetItemUser(id int) (Product, error)
 }
 
 type ProductData interface {
-	GetAllItemData()
-	PostCartData()
+	GetAllItemData() []Product
 	PostItemData(newProduct Product) Product
 	UpdateItemData(newProduct Product, productID int) Product
 	DeleteItemData()
-	GetItemData()
+	GetItemData(productID int) (Product, error)
 }

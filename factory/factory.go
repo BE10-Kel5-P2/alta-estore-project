@@ -1,9 +1,13 @@
 package factory
 
 import (
-	"altaproject2/features/user/data"
-	"altaproject2/features/user/delivery"
-	"altaproject2/features/user/usecase"
+	ud "altaproject2/features/user/data"
+	udeli "altaproject2/features/user/delivery"
+	uc "altaproject2/features/user/usecase"
+
+	pd "altaproject2/features/product/data"
+	pdeli "altaproject2/features/product/delivery"
+	pc "altaproject2/features/product/usecase"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/go-playground/validator/v10"
@@ -12,10 +16,15 @@ import (
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session) {
-	userData := data.New(db)
 	valid := validator.New()
-	userCase := usecase.New(userData, valid)
-	userHandler := delivery.New(userCase, awsConn)
-	delivery.RouteUser(e, userHandler)
 
+	userData := ud.New(db)
+	userCase := uc.New(userData, valid)
+	userHandler := udeli.New(userCase, awsConn)
+	udeli.RouteUser(e, userHandler)
+
+	postData := pd.New(db)
+	postCase := pc.New(postData, valid)
+	postHandler := pdeli.New(postCase, awsConn)
+	pdeli.RouteProduct(e, postHandler)
 }

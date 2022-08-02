@@ -217,7 +217,7 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 			"username":     data.Username,
 			"photoprofile": data.PhotoProfile,
 			"code":         200,
-			"message":      "data found",
+			"message":      "get data success",
 		})
 	}
 }
