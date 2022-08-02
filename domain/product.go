@@ -10,7 +10,7 @@ type Product struct {
 	ProductPic  string
 	Stock       int
 	Qty         int
-	// Cart []Cart
+	Cart        []Cart
 }
 
 type ProductHandler interface {

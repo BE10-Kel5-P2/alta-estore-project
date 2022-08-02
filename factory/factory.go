@@ -9,6 +9,10 @@ import (
 	pdeli "altaproject2/features/product/delivery"
 	pc "altaproject2/features/product/usecase"
 
+	cd "altaproject2/features/cart/data"
+	cdeli "altaproject2/features/cart/delivery"
+	cc "altaproject2/features/cart/usecase"
+
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -27,4 +31,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session) {
 	postCase := pc.New(postData, valid)
 	postHandler := pdeli.New(postCase, awsConn)
 	pdeli.RouteProduct(e, postHandler)
+
+	cartData := cd.New(db)
+	cartCase := cc.New(cartData)
+	cartHandler := cdeli.New(cartCase)
+	cdeli.RouteCart(e, cartHandler)
 }
