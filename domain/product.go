@@ -16,14 +16,14 @@ type Product struct {
 type ProductHandler interface {
 	GetItems() echo.HandlerFunc
 	PostItem() echo.HandlerFunc
-  UpdateItem() echo.HandlerFunc
+	UpdateItem() echo.HandlerFunc
 	DeleteItem() echo.HandlerFunc
 	GetItem() echo.HandlerFunc
 }
 
 type ProductUseCase interface {
 	GetAllItems() ([]Product, int)
-  PostItemAdmin(newProduct Product) int
+	PostItemAdmin(newProduct Product) int
 	UpdateItemAdmin(newProduct Product, productID int) int
 	DeleteItemAdmin()
 	GetItemUser(id int) (Product, error)

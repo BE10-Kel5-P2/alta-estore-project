@@ -60,22 +60,6 @@ func (_m *ProductHandler) GetItems() echo.HandlerFunc {
 	return r0
 }
 
-// PostCart provides a mock function with given fields:
-func (_m *ProductHandler) PostCart() echo.HandlerFunc {
-	ret := _m.Called()
-
-	var r0 echo.HandlerFunc
-	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
-		r0 = rf()
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(echo.HandlerFunc)
-		}
-	}
-
-	return r0
-}
-
 // PostItem provides a mock function with given fields:
 func (_m *ProductHandler) PostItem() echo.HandlerFunc {
 	ret := _m.Called()

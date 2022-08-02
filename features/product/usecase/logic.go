@@ -64,7 +64,7 @@ func (pd *productCase) PostItemAdmin(newProduct domain.Product) int {
 		log.Println("Validation errror : ", validError)
 		return 400
 	}
-
+	product.Qty = 0
 	insert := pd.productData.PostItemData(product.ToModel())
 
 	if insert.ID == 0 {
