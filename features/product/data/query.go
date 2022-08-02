@@ -2,6 +2,7 @@ package data
 
 import (
 	"altaproject2/domain"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -37,11 +38,24 @@ func (*productData) PostCartData() {
 }
 
 // PostItemData implements domain.ProductData
-func (*productData) PostItemData() {
-	panic("unimplemented")
+func (pd *productData) PostItemData(newProduct domain.Product) domain.Product {
+	var product = FromModel(newProduct)
+	err := pd.db.Create(&product).Error
+
+	if product.ID == 0 {
+		log.Println("Invalid ID")
+		return domain.Product{}
+	}
+
+	if err != nil {
+		log.Println("Cant create product object", err.Error())
+		return domain.Product{}
+	}
+
+	return product.ToModel()
 }
 
 // UpdateItemData implements domain.ProductData
-func (*productData) UpdateItemData() {
+func (pd *productData) UpdateItemData() {
 	panic("unimplemented")
 }

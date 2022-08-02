@@ -24,7 +24,7 @@ type ProductHandler interface {
 type ProductUseCase interface {
 	GetAllItems()
 	PostCartUser()
-	PostItemAdmin()
+	PostItemAdmin(newProduct Product) Product
 	UpdateItemAdmin()
 	DeleteItemAdmin()
 	GetItemUser()
@@ -33,7 +33,7 @@ type ProductUseCase interface {
 type ProductData interface {
 	GetAllItemData()
 	PostCartData()
-	PostItemData()
+	PostItemData(newProduct Product) Product
 	UpdateItemData()
 	DeleteItemData()
 	GetItemData()
