@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"altaproject2/domain"
+	"altaproject2/features/common"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -26,8 +27,29 @@ func (*productHandler) DeleteItem() echo.HandlerFunc {
 }
 
 // GetItem implements domain.ProductHandler
-func (*productHandler) GetItem() echo.HandlerFunc {
-	panic("unimplemented")
+func (ph *productHandler) GetItem() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		prd := common.ExtractData(c)
+
+		data, err := ph.productUserCase.GetItemUser(prd.ID)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"productphoto": data.ProductPic,
+			"productname":  data.ProductName,
+			"price":        data.Price,
+			"stock":        data.Stock,
+			"quantity":     data.Qty,
+			"description":  data.Description,
+			"code":         200,
+			"message":      "success get data",
+		})
+	}
 }
 
 // GetItems implements domain.ProductHandler

@@ -16,4 +16,5 @@ func RouteProduct(e *echo.Echo, ph domain.ProductHandler) {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.GET("/products", ph.GetItems())
+	e.GET("/products/:id", ph.GetItems())
 }

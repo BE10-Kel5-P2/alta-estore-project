@@ -37,8 +37,15 @@ func (pd *productData) GetAllItemData() []domain.Product {
 }
 
 // GetItemData implements domain.ProductData
-func (*productData) GetItemData() {
-	panic("unimplemented")
+func (pd *productData) GetItemData(productID int) (domain.Product, error) {
+	var tmp Product
+	err := pd.db.Where("ID = ?", productID).First(&tmp).Error
+	if err != nil {
+		log.Println("There is a problem with data", err.Error())
+		return domain.Product{}, err
+	}
+
+	return tmp.ToModel(), nil
 }
 
 // PostItemData implements domain.ProductData
