@@ -13,7 +13,7 @@ type Product struct {
 	Price       int    `json:"price" form:"price" validate:"required"`
 	ProductPic  string `json:"productpic" form:"productpic" validate:"required"`
 	Stock       int    `json:"stock" form:"stock" validate:"required"`
-	Qty         int    `json:"qty" form:"qty" validate:"required"`
+	Qty         int    `json:"qty" form:"qty"`
 }
 
 func (u *Product) ToModel() domain.Product {
@@ -45,5 +45,6 @@ func FromModel(data domain.Product) Product {
 	res.Price = data.Price
 	res.ProductPic = data.ProductPic
 	res.Stock = data.Stock
+	res.Qty = data.Qty
 	return res
 }

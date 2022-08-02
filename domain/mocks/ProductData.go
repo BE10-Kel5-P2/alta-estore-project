@@ -55,14 +55,32 @@ func (_m *ProductData) GetItemData(productID int) (domain.Product, error) {
 	return r0, r1
 }
 
-// PostItemData provides a mock function with given fields:
-func (_m *ProductData) PostItemData() {
-	_m.Called()
+// PostItemData provides a mock function with given fields: newProduct
+func (_m *ProductData) PostItemData(newProduct domain.Product) domain.Product {
+	ret := _m.Called(newProduct)
+
+	var r0 domain.Product
+	if rf, ok := ret.Get(0).(func(domain.Product) domain.Product); ok {
+		r0 = rf(newProduct)
+	} else {
+		r0 = ret.Get(0).(domain.Product)
+	}
+
+	return r0
 }
 
-// UpdateItemData provides a mock function with given fields:
-func (_m *ProductData) UpdateItemData() {
-	_m.Called()
+// UpdateItemData provides a mock function with given fields: newProduct, productID
+func (_m *ProductData) UpdateItemData(newProduct domain.Product, productID int) domain.Product {
+	ret := _m.Called(newProduct, productID)
+
+	var r0 domain.Product
+	if rf, ok := ret.Get(0).(func(domain.Product, int) domain.Product); ok {
+		r0 = rf(newProduct, productID)
+	} else {
+		r0 = ret.Get(0).(domain.Product)
+	}
+
+	return r0
 }
 
 type mockConstructorTestingTNewProductData interface {

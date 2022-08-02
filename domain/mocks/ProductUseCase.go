@@ -62,14 +62,32 @@ func (_m *ProductUseCase) GetItemUser(id int) (domain.Product, error) {
 	return r0, r1
 }
 
-// PostItemAdmin provides a mock function with given fields:
-func (_m *ProductUseCase) PostItemAdmin() {
-	_m.Called()
+// PostItemAdmin provides a mock function with given fields: newProduct
+func (_m *ProductUseCase) PostItemAdmin(newProduct domain.Product) int {
+	ret := _m.Called(newProduct)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(domain.Product) int); ok {
+		r0 = rf(newProduct)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	return r0
 }
 
-// UpdateItemAdmin provides a mock function with given fields:
-func (_m *ProductUseCase) UpdateItemAdmin() {
-	_m.Called()
+// UpdateItemAdmin provides a mock function with given fields: newProduct, productID
+func (_m *ProductUseCase) UpdateItemAdmin(newProduct domain.Product, productID int) int {
+	ret := _m.Called(newProduct, productID)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(domain.Product, int) int); ok {
+		r0 = rf(newProduct, productID)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	return r0
 }
 
 type mockConstructorTestingTNewProductUseCase interface {

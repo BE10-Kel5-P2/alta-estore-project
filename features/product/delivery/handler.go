@@ -39,7 +39,7 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 			})
 		}
 
-		file, err := c.FormFile("photoprofile")
+		file, err := c.FormFile("productpic")
 
 		if err != nil {
 			log.Println(err)
@@ -162,6 +162,7 @@ func (ps *productHandler) UpdateItem() echo.HandlerFunc {
 // GetItems implements domain.ProductHandler
 func (ps *productHandler) GetItems() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var arrmap []map[string]interface{}
 		data, status := ps.productUseCase.GetAllItems()
 
 		if status == 404 {
@@ -170,8 +171,18 @@ func (ps *productHandler) GetItems() echo.HandlerFunc {
 				"message": "Data not found",
 			})
 		}
+		for i := 0; i < len(data); i++ {
+			var res = map[string]interface{}{}
+			res["productphoto"] = data[0].ProductPic
+			res["productname"] = data[0].ProductName
+			res["price"] = data[0].Price
+			res["stock"] = data[0].Stock
+			res["qty"] = data[0].Qty
+			arrmap = append(arrmap, res)
+		}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"data":    data,
+			"data":    arrmap,
 			"code":    status,
 			"message": "Data not found",
 		})
