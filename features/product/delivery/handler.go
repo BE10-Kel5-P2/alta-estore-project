@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"altaproject2/domain"
+	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/labstack/echo/v4"
@@ -30,13 +31,23 @@ func (*productHandler) GetItem() echo.HandlerFunc {
 }
 
 // GetItems implements domain.ProductHandler
-func (*productHandler) GetItems() echo.HandlerFunc {
-	panic("unimplemented")
-}
+func (ps *productHandler) GetItems() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data, status := ps.productUserCase.GetAllItems()
 
-// PostCart implements domain.ProductHandler
-func (*productHandler) PostCart() echo.HandlerFunc {
-	panic("unimplemented")
+		if status == 404 {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    status,
+				"message": "Data not found",
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    data,
+			"code":    status,
+			"message": "Data not found",
+		})
+	}
 }
 
 // PostItem implements domain.ProductHandler

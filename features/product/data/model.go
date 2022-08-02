@@ -8,7 +8,6 @@ import (
 
 type Product struct {
 	gorm.Model
-	CartID      int
 	ProductName string `json:"productname" form:"productname" validate:"required"`
 	Description string `json:"description" form:"description" validate:"required"`
 	Price       int    `json:"price" form:"price" validate:"required"`
@@ -26,7 +25,6 @@ func (u *Product) ToModel() domain.Product {
 		ProductPic:  u.ProductPic,
 		Stock:       u.Stock,
 		Qty:         u.Qty,
-		CartID:      u.CartID,
 	}
 }
 
@@ -47,6 +45,5 @@ func FromModel(data domain.Product) Product {
 	res.Price = data.Price
 	res.ProductPic = data.ProductPic
 	res.Stock = data.Stock
-	res.CartID = data.CartID
 	return res
 }

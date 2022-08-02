@@ -4,18 +4,17 @@ import "github.com/labstack/echo/v4"
 
 type Product struct {
 	ID          int
-	CartID      int
 	ProductName string
 	Description string
 	Price       int
 	ProductPic  string
 	Stock       int
 	Qty         int
+	// Cart []Cart
 }
 
 type ProductHandler interface {
 	GetItems() echo.HandlerFunc
-	PostCart() echo.HandlerFunc
 	PostItem() echo.HandlerFunc
 	UpdateItem() echo.HandlerFunc
 	DeleteItem() echo.HandlerFunc
@@ -23,8 +22,7 @@ type ProductHandler interface {
 }
 
 type ProductUseCase interface {
-	GetAllItems()
-	PostCartUser()
+	GetAllItems() ([]Product, int)
 	PostItemAdmin()
 	UpdateItemAdmin()
 	DeleteItemAdmin()
@@ -32,8 +30,7 @@ type ProductUseCase interface {
 }
 
 type ProductData interface {
-	GetAllItemData()
-	PostCartData()
+	GetAllItemData() []Product
 	PostItemData()
 	UpdateItemData()
 	DeleteItemData()
