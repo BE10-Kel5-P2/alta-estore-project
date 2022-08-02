@@ -17,7 +17,7 @@ func RouteProduct(e *echo.Echo, psr domain.ProductHandler) {
 	// }))
 	// e.Pre(middleware.RemoveTrailingSlash())
 
-	e.POST("/products", psr.PostItem())
+	e.POST("/products", psr.PostItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 	e.PUT("/products", psr.UpdateItem(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 
 }
