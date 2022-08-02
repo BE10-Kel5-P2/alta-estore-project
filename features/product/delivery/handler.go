@@ -160,8 +160,8 @@ func (ps *productHandler) UpdateItem() echo.HandlerFunc {
 			})
 		}
 		var newproduct ProductFormat
-		// cost := 10
-		param := common.ExtractData(c)
+		id := c.Param("id")
+		cnv, _ := strconv.Atoi(id)
 		bind := c.Bind(&newproduct)
 
 		if bind != nil {
@@ -182,7 +182,7 @@ func (ps *productHandler) UpdateItem() echo.HandlerFunc {
 			newproduct.ProductPic = link
 		}
 
-		status := ps.productUseCase.UpdateItemAdmin(newproduct.ToModel(), param.ID)
+		status := ps.productUseCase.UpdateItemAdmin(newproduct.ToModel(), cnv)
 
 		if status == 400 {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
