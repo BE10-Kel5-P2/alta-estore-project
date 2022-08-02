@@ -8,12 +8,13 @@ import (
 
 type Product struct {
 	gorm.Model
-	ProductName string `json:"productname" form:"productname" validate:"required"`
-	Description string `json:"description" form:"description" validate:"required"`
-	Price       int    `json:"price" form:"price" validate:"required"`
-	ProductPic  string `json:"productpic" form:"productpic" validate:"required"`
-	Stock       int    `json:"stock" form:"stock" validate:"required"`
-	Qty         int    `json:"qty" form:"qty"`
+	ProductName string        `json:"productname" form:"productname" validate:"required"`
+	Description string        `json:"description" form:"description" validate:"required"`
+	Price       int           `json:"price" form:"price" validate:"required"`
+	ProductPic  string        `json:"productpic" form:"productpic" validate:"required"`
+	Stock       int           `json:"stock" form:"stock" validate:"required"`
+	Qty         int           `json:"qty" form:"qty"`
+	Cart        []domain.Cart `gorm:"foreignKey:Productid"`
 }
 
 func (u *Product) ToModel() domain.Product {
