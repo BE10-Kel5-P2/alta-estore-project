@@ -4,6 +4,7 @@ import "github.com/labstack/echo/v4"
 
 type Product struct {
 	ID          int
+	CartID      int
 	ProductName string
 	Description string
 	Price       int
