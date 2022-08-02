@@ -56,6 +56,19 @@ func (pd *productData) PostItemData(newProduct domain.Product) domain.Product {
 }
 
 // UpdateItemData implements domain.ProductData
-func (pd *productData) UpdateItemData() {
-	panic("unimplemented")
+func (pd *productData) UpdateItemData(newProduct domain.Product, productID int) domain.Product {
+	var product = FromModel(newProduct)
+	err := pd.db.Model(&Product{}).Where("ID = ?", productID).Updates(product)
+
+	if err.Error != nil {
+		log.Println("Cant update product object", err.Error.Error())
+		return domain.Product{}
+	}
+
+	if err.RowsAffected == 0 {
+		log.Println("Data Not Found")
+		return domain.Product{}
+	}
+
+	return product.ToModel()
 }
