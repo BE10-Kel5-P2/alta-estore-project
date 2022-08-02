@@ -49,11 +49,37 @@ func (pd *productData) GetItemData(productID int) (domain.Product, error) {
 }
 
 // PostItemData implements domain.ProductData
-func (*productData) PostItemData() {
-	panic("unimplemented")
+func (pd *productData) PostItemData(newProduct domain.Product) domain.Product {
+	var product = FromModel(newProduct)
+	err := pd.db.Create(&product).Error
+
+	if product.ID == 0 {
+		log.Println("Invalid ID")
+		return domain.Product{}
+	}
+
+	if err != nil {
+		log.Println("Cant create product object", err.Error())
+		return domain.Product{}
+	}
+
+	return product.ToModel()
 }
 
 // UpdateItemData implements domain.ProductData
-func (*productData) UpdateItemData() {
-	panic("unimplemented")
+func (pd *productData) UpdateItemData(newProduct domain.Product, productID int) domain.Product {
+	var product = FromModel(newProduct)
+	err := pd.db.Model(&Product{}).Where("ID = ?", productID).Updates(product)
+
+	if err.Error != nil {
+		log.Println("Cant update product object", err.Error.Error())
+		return domain.Product{}
+	}
+
+	if err.RowsAffected == 0 {
+		log.Println("Data Not Found")
+		return domain.Product{}
+	}
+
+	return product.ToModel()
 }
