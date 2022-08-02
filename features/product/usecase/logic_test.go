@@ -80,6 +80,25 @@ func TestUpdateProduct(t *testing.T) {
 		res := useCase.UpdateItemAdmin(mockData, 1)
 
 		assert.Equal(t, 200, res)
+	})
+}
+
+func TestGetProduct(t *testing.T) {
+	repo := new(mocks.ProductData)
+
+	mockData := domain.Product{ID: 1, ProductName: "Men's Shirt", Description: "Ready for size M, L, XL, XXL", Price: 100000, ProductPic: "Shirt.jpg", Stock: 5, Qty: 1}
+
+	t.Run("success get data", func(t *testing.T) {
+		repo.On("GetItemData", mock.Anything).Return(mockData, nil).Once()
+		productCase := New(repo, validator.New())
+		res, error := productCase.GetItemUser(1)
+
+		assert.Nil(t, error)
+		assert.Equal(t, mockData.ProductName, res.ProductName)
+		assert.Equal(t, mockData.Description, res.Description)
+		assert.Equal(t, mockData.Price, res.Price)
+		assert.Equal(t, mockData.Stock, res.Stock)
+		assert.Equal(t, mockData.Qty, res.Qty)
 		repo.AssertExpectations(t)
 	})
 }

@@ -273,21 +273,21 @@ paths:
                   $ref: '#/components/schemas/ProductData'
               example:
                 data:
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men'sBag
                   price: 20000
                   stock: 5
-                  quantity: 1
-                - productphoto: photo.jpg
+                  quantity: 0
+                - productpic: photo.jpg
                   productname: Men'sShirt
                   price: 100000
                   stock: 5
-                  quantity: 1
-                - productphoto: photo.jpg
+                  quantity: 0
+                - productpic: photo.jpg
                   productname: Men'sCap
                   price: 15000
                   stock: 5
-                  quantity: 1
+                  quantity: 0
                 code: 200
                 message: Success get data
         '404':
@@ -326,7 +326,7 @@ paths:
                 $ref: '#/components/schemas/UserData'
               example:
                 productid: 1
-                productphoto: photo.jpg
+                productpic: photo.jpg
                 productname: Men's Bag
                 price: 20000
                 stock: 5
@@ -382,7 +382,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UserData'
             example:
-              productphoto: photo.jpg
+              productpic: photo.jpg
               productname: Men's Bag
               price: 20000
               stock: 5
@@ -487,11 +487,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductData'
               example:
-                productphoto: photo.jpg
+                productpic: photo.jpg
                 productname: Men'sBag
                 price: 20000
                 stock: 5
-                quantity: 1
+                quantity: 0
                 description: ini adalah tas
                 code: 200
                 message: Success get data
@@ -529,7 +529,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductData'
               example:
-                - productphoto: shoes.jpg
+                - productpic: shoes.jpg
                   productname: Men's shoes
                   price: 20000
                   stock: 5
@@ -581,19 +581,19 @@ paths:
                   $ref: '#/components/schemas/ProductData'
               example:
                 data:
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men's Bag
                   price: 20000
                   stock: 5
                   quantity: 1
                   subtotal: 100000
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men's Shirt
                   price: 100000
                   stock: 5
                   quantity: 2
                   subtotal: 200000
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men's Cap
                   price: 15000
                   stock: 4
@@ -733,13 +733,13 @@ paths:
             schema:
               $ref: '#/components/schemas/OrderData'
             example:
-              - productphoto: shoes.jpg
+              - productpic: shoes.jpg
                 productname: Men's shoes
                 price: 20000
                 stock: 5
                 quantity: 1
                 subtotal: 100000
-              - productphoto: shoes.jpg
+              - productpic: shoes.jpg
                 productname: Men's shoes
                 price: 20000
                 stock: 5
@@ -800,14 +800,14 @@ paths:
                   $ref: '#/components/schemas/OrderData'
               example:
                 Transaction:
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men'sBag
                   unitprice: 20000
                   quantity: 5
                   totalprice: 100000
                   address: Jl.Simatupang
                   paymentmethod: Ovo
-                - productphoto: photo.jpg
+                - productpic: photo.jpg
                   productname: Men'sShirt
                   unitprice: 100000
                   quantity: 1
@@ -900,7 +900,7 @@ components:
       properties:
         productid:
           type: integer
-        productphoto:
+        productpic:
           type: string
           format: binary
         productname:
