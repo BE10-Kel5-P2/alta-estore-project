@@ -120,3 +120,34 @@ func TestUpdateUser(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestLoginUser(t *testing.T) {
+	repo := new(mocks.UserData)
+	mockData := domain.User{Username: "NotAPanda", Password: "polar"}
+	returnData := domain.User{ID: 1}
+	token := "sjage2w62vsdgaqsgh"
+	t.Run("Succes Login", func(t *testing.T) {
+		repo.On("GetPasswordData", mock.Anything).Return("$2a$10$SrMvwwY/QnQ4nZunBvGOuOm2U1w8wcAENOoAMI7l8xH7C1Vmt5mru")
+		repo.On("Login", mock.Anything).Return(returnData, token).Once()
+		userUseCase := New(repo, validator.New())
+		res, err := userUseCase.Login(mockData)
+
+		assert.Nil(t, err)
+		assert.Greater(t, res.ID, 0)
+		repo.AssertExpectations(t)
+	})
+}
+
+func TestDeleteUser(t *testing.T) {
+	repo := new(mocks.UserData)
+
+	t.Run("Succes delete", func(t *testing.T) {
+		repo.On("Delete", mock.Anything).Return(true).Once()
+		usecase := New(repo, validator.New())
+		delete, err := usecase.Delete(1)
+
+		assert.Nil(t, err)
+		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
+	})
+}
