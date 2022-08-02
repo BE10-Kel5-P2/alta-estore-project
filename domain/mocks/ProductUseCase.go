@@ -13,9 +13,25 @@ type ProductUseCase struct {
 	mock.Mock
 }
 
-// DeleteItemAdmin provides a mock function with given fields:
-func (_m *ProductUseCase) DeleteItemAdmin() {
-	_m.Called()
+// DeleteItemAdmin provides a mock function with given fields: productID
+func (_m *ProductUseCase) DeleteItemAdmin(productID int) (bool, error) {
+	ret := _m.Called(productID)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(int) bool); ok {
+		r0 = rf(productID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(productID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetAllItems provides a mock function with given fields:

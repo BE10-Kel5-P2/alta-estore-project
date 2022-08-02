@@ -85,8 +85,17 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 func (ph *productHandler) DeleteItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := common.ExtractData(c)
+		if data.Role == "user" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": "Unauthorized",
+			})
+		}
 
-		status, err := ph.productUserCase.DeleteItemAdmin(data.ID)
+		id := c.Param("id")
+		cnv, _ := strconv.Atoi(id)
+
+		status, err := ph.productUseCase.DeleteItemAdmin(cnv)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{
@@ -112,10 +121,10 @@ func (ph *productHandler) DeleteItem() echo.HandlerFunc {
 // GetItem implements domain.ProductHandler
 func (ph *productHandler) GetItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		prd := c.Param("prd")
+		prd := c.Param("id")
 		id, _ := strconv.Atoi(prd)
 
-		data, err := ph.productUserCase.GetItemUser(id)
+		data, err := ph.productUseCase.GetItemUser(id)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{
