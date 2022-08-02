@@ -28,6 +28,13 @@ func New(ps domain.ProductUseCase, aws *session.Session) domain.ProductHandler {
 
 func (ps *productHandler) PostItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		data := common.ExtractData(c)
+		if data.Role != "admin" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": "Unauthorized",
+			})
+		}
 		var newproduct ProductFormat
 		bind := c.Bind(&newproduct)
 		//cost := 10
@@ -46,9 +53,7 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 			log.Println(err)
 		}
 
-		filename := fmt.Sprintf("%s_profilepic.jpg", newproduct.ProductName)
-		log.Println(filename)
-		link := awss3.DoUpload(ps.conn, *file, filename)
+		link := awss3.DoUpload(ps.conn, *file, file.Filename)
 		newproduct.ProductPic = link
 
 		status := ps.productUseCase.PostItemAdmin(newproduct.ToModel())
@@ -85,7 +90,7 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 func (ph *productHandler) DeleteItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := common.ExtractData(c)
-		if data.Role == "user" {
+		if data.Role != "admin" {
 			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
 				"code":    401,
 				"message": "Unauthorized",
@@ -147,6 +152,13 @@ func (ph *productHandler) GetItem() echo.HandlerFunc {
 
 func (ps *productHandler) UpdateItem() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		data := common.ExtractData(c)
+		if data.Role != "admin" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": "Unauthorized",
+			})
+		}
 		var newproduct ProductFormat
 		// cost := 10
 		param := common.ExtractData(c)
