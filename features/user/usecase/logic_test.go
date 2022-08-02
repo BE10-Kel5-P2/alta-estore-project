@@ -151,3 +151,21 @@ func TestDeleteUser(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestGetUser(t *testing.T) {
+	repo := new(mocks.UserData)
+	mockData := domain.User{ID: 1, Username: "NotAPanda", Email: "lukman@gmail.com", Address: "jakarta", Password: "polar", PhotoProfile: "lukman.jpg"}
+	// emptyData := domain.User{Username: "", Email: "", Address: "", Password: "", PhotoProfile: ""}
+
+	t.Run("success get data", func(t *testing.T) {
+		repo.On("GetProfile", mock.Anything).Return(mockData, nil).Once()
+		useCase := New(repo, validator.New())
+		res, error := useCase.GetProfile(1)
+
+		assert.Nil(t, error)
+		assert.Equal(t, mockData.Username, res.Username)
+		assert.Equal(t, mockData.PhotoProfile, res.PhotoProfile)
+		repo.AssertExpectations(t)
+
+	})
+}
