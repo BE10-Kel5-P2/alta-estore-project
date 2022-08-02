@@ -2,6 +2,7 @@ package data
 
 import (
 	"altaproject2/domain"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -22,17 +23,21 @@ func (*productData) DeleteItemData() {
 }
 
 // GetAllItemData implements domain.ProductData
-func (*productData) GetAllItemData() {
-	panic("unimplemented")
+func (pd *productData) GetAllItemData() []domain.Product {
+	var products []Product
+
+	err := pd.db.Find(&products)
+
+	if err.Error != nil {
+		log.Println("cant get all data from db", err.Error)
+		return nil
+	}
+
+	return ParseToArr(products)
 }
 
 // GetItemData implements domain.ProductData
 func (*productData) GetItemData() {
-	panic("unimplemented")
-}
-
-// PostCartData implements domain.ProductData
-func (*productData) PostCartData() {
 	panic("unimplemented")
 }
 

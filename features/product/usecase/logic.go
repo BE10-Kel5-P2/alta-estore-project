@@ -24,17 +24,18 @@ func (*productCase) DeleteItemAdmin() {
 }
 
 // GetAllItems implements domain.ProductUseCase
-func (*productCase) GetAllItems() {
-	panic("unimplemented")
+func (pd *productCase) GetAllItems() ([]domain.Product, int) {
+	get := pd.productData.GetAllItemData()
+
+	if len(get) == 0 {
+		return nil, 404
+	}
+
+	return get, 200
 }
 
 // GetItemUser implements domain.ProductUseCase
 func (*productCase) GetItemUser() {
-	panic("unimplemented")
-}
-
-// PostCartUser implements domain.ProductUseCase
-func (*productCase) PostCartUser() {
 	panic("unimplemented")
 }
 
