@@ -3,10 +3,7 @@ package delivery
 import (
 	"altaproject2/domain"
 	"altaproject2/features/common"
-<<<<<<< HEAD
-=======
 	"log"
->>>>>>> 025aa539018e15a8e76492712446454f0bbd745e
 	"net/http"
 
 	"github.com/labstack/echo/v4"

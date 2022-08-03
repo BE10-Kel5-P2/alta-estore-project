@@ -19,4 +19,5 @@ func RouteCart(e *echo.Echo, ch domain.CartHandler) {
 
 	e.PUT("/carts", ch.Update(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 	e.POST("/carts", ch.Post(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.GET("/carts", ch.Get(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }

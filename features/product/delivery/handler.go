@@ -218,11 +218,11 @@ func (ps *productHandler) GetItems() echo.HandlerFunc {
 		}
 		for i := 0; i < len(data); i++ {
 			var res = map[string]interface{}{}
-			res["productphoto"] = data[0].ProductPic
-			res["productname"] = data[0].ProductName
-			res["price"] = data[0].Price
-			res["stock"] = data[0].Stock
-			res["qty"] = data[0].Qty
+			res["productphoto"] = data[i].ProductPic
+			res["productname"] = data[i].ProductName
+			res["price"] = data[i].Price
+			res["stock"] = data[i].Stock
+			res["qty"] = data[i].Qty
 			arrmap = append(arrmap, res)
 		}
 

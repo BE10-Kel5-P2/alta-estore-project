@@ -10,12 +10,14 @@ type Cart struct {
 	Quantity  int
 }
 
-type ProductCart struct {
+type CartProduct struct {
 	ProductName string
+	Description string
 	Price       int
 	ProductPic  string
 	Stock       int
-	Qty         int
+	Quantity    int
+	Subtotal    int
 }
 
 type CartHandler interface {
@@ -28,13 +30,15 @@ type CartHandler interface {
 type CartUseCase interface {
 	UpdateData(newUpdate Cart, productId int) int
 	PostCart(newcart Cart) int
-	GetCart()
+	GetCart(userid int) (Cart, []CartProduct, int)
 	DeleteCart(productID int) (bool, error)
 }
 
 type CartData interface {
 	UpdateData(newUpdate Cart, productId int) Cart
 	PostData(newcart Cart) Cart
-	GetData()
 	DeleteData(productID int) bool
+	GetData(userid int) Cart
+	GetDataProduct(userid int) []CartProduct
+	CheckDuplicate(newcart Cart) bool
 }

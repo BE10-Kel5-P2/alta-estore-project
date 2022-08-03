@@ -41,8 +41,16 @@ func (cd *cartCase) DeleteCart(productId int) (bool, error) {
 }
 
 // GetCart implements domain.CartUseCase
-func (*cartCase) GetCart() {
-	panic("unimplemented")
+func (cd *cartCase) GetCart(userid int) (domain.Cart, []domain.CartProduct, int) {
+	getproduct := cd.cartData.GetDataProduct(userid)
+	get := cd.cartData.GetData(userid)
+
+	if get.ID == 0 {
+		log.Println("data not found")
+		return domain.Cart{}, nil, 404
+	}
+
+	return get, getproduct, 200
 }
 
 // PostCart implements domain.CartUseCase
@@ -53,6 +61,13 @@ func (cd *cartCase) PostCart(newcart domain.Cart) int {
 
 	if validError != nil {
 		log.Println("Validation errror : ", validError)
+		return 400
+	}
+
+	duplicate := cd.cartData.CheckDuplicate(cartdata.ToModel())
+
+	if duplicate {
+		log.Println("Duplicate Data")
 		return 400
 	}
 
