@@ -5,7 +5,9 @@ import "github.com/labstack/echo/v4"
 type Cart struct {
 	ID        int
 	Subtotal  int
+	Userid    int
 	Productid int
+	Quantity  int
 }
 
 type ProductCart struct {
@@ -24,15 +26,15 @@ type CartHandler interface {
 }
 
 type CartUseCase interface {
-	PostCart()
-	UpdateCart()
+	UpdateData(newUpdate Cart, productId int) int
+	PostCart(newcart Cart) int
 	GetCart()
 	DeleteCart(productID int) (bool, error)
 }
 
 type CartData interface {
-	PostData()
-	UpdateData()
+	UpdateData(newUpdate Cart, productId int) Cart
+	PostData(newcart Cart) Cart
 	GetData()
 	DeleteData(productID int) bool
 }

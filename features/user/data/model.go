@@ -2,6 +2,7 @@ package data
 
 import (
 	"altaproject2/domain"
+	"altaproject2/features/cart/data"
 
 	"gorm.io/gorm"
 )
@@ -14,6 +15,7 @@ type User struct {
 	PhotoProfile string `json:"photoprofile" form:"photoprofile"`
 	Password     string `json:"password" form:"password" validate:"required"`
 	Role         string
+	Cart         []data.Cart `gorm:"foreignKey:Userid"`
 	// MyOrder []data.Order
 }
 

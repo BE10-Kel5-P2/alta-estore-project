@@ -37,7 +37,6 @@ func (ps *productHandler) PostItem() echo.HandlerFunc {
 		}
 		var newproduct ProductFormat
 		bind := c.Bind(&newproduct)
-		//cost := 10
 
 		if bind != nil {
 			log.Println("cant bind")
@@ -230,7 +229,7 @@ func (ps *productHandler) GetItems() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"data":    arrmap,
 			"code":    status,
-			"message": "Data not found",
+			"message": "Success Get All Data product",
 		})
 	}
 }
