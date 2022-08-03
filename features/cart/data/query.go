@@ -2,6 +2,7 @@ package data
 
 import (
 	"altaproject2/domain"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -17,8 +18,20 @@ type cartData struct {
 }
 
 // DeleteData implements domain.CartData
-func (*cartData) DeleteData() {
-	panic("unimplemented")
+func (cd *cartData) DeleteData(productID int) bool {
+	err := cd.db.Where("ID = ?", productID).Delete(&Cart{})
+
+	if err.Error != nil {
+		log.Println("cannot delete data", err.Error.Error())
+		return false
+	}
+
+	if err.RowsAffected < 1 {
+		log.Println("No content deleted", err.Error.Error())
+		return false
+	}
+
+	return true
 }
 
 // GetData implements domain.CartData

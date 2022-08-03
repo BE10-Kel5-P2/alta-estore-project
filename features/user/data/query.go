@@ -32,8 +32,9 @@ func (ud *userData) Login(userdata domain.User) domain.User {
 
 func (ud *userData) Delete(userID int) bool {
 	err := ud.db.Where("ID = ?", userID).Delete(&User{})
+
 	if err.Error != nil {
-		log.Println("cannot delete content", err.Error.Error())
+		log.Println("cannot delete data", err.Error.Error())
 		return false
 	}
 	if err.RowsAffected < 1 {

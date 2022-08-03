@@ -1,20 +1,28 @@
 package usecase
 
-import "altaproject2/domain"
+import (
+	"altaproject2/domain"
+	"errors"
+)
 
 type cartCase struct {
 	cartData domain.CartData
 }
 
-func New(pd domain.CartData) domain.CartUseCase {
+func New(cd domain.CartData) domain.CartUseCase {
 	return &cartCase{
-		cartData: pd,
+		cartData: cd,
 	}
 }
 
 // Delete implements domain.CartUseCase
-func (*cartCase) DeleteCart() {
-	panic("unimplemented")
+func (cd *cartCase) DeleteCart(productId int) (bool, error) {
+	res := cd.cartData.DeleteData(productId)
+
+	if !res {
+		return false, errors.New("failed to delete cart")
+	}
+	return true, nil
 }
 
 // GetCart implements domain.CartUseCase

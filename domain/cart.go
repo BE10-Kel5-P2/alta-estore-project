@@ -8,6 +8,14 @@ type Cart struct {
 	Productid int
 }
 
+type ProductCart struct {
+	ProductName string
+	Price       int
+	ProductPic  string
+	Stock       int
+	Qty         int
+}
+
 type CartHandler interface {
 	Post() echo.HandlerFunc
 	Update() echo.HandlerFunc
@@ -19,12 +27,12 @@ type CartUseCase interface {
 	PostCart()
 	UpdateCart()
 	GetCart()
-	DeleteCart()
+	DeleteCart(productID int) (bool, error)
 }
 
 type CartData interface {
 	PostData()
 	UpdateData()
 	GetData()
-	DeleteData()
+	DeleteData(productID int) bool
 }

@@ -8,8 +8,8 @@ import (
 
 type Cart struct {
 	gorm.Model
-	Subtotal  int
-	Productid int
+	Subtotal  int `json:"subtotal" form:"subtotal"`
+	Productid int `json:"productid" form:"productid"`
 }
 
 func (u *Cart) ToModel() domain.Cart {
