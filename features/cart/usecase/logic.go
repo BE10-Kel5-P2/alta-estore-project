@@ -2,14 +2,11 @@ package usecase
 
 import (
 	"altaproject2/domain"
-<<<<<<< HEAD
-	"errors"
-=======
 	"altaproject2/features/cart/data"
+	"errors"
 	"log"
 
 	"github.com/go-playground/validator/v10"
->>>>>>> 025aa539018e15a8e76492712446454f0bbd745e
 )
 
 type cartCase struct {
@@ -17,16 +14,10 @@ type cartCase struct {
 	valid    *validator.Validate
 }
 
-<<<<<<< HEAD
-func New(cd domain.CartData) domain.CartUseCase {
-	return &cartCase{
-		cartData: cd,
-=======
 func New(cd domain.CartData, val *validator.Validate) domain.CartUseCase {
 	return &cartCase{
 		cartData: cd,
 		valid:    val,
->>>>>>> 025aa539018e15a8e76492712446454f0bbd745e
 	}
 }
 
