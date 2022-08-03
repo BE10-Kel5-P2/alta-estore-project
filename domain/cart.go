@@ -5,6 +5,7 @@ import "github.com/labstack/echo/v4"
 type Cart struct {
 	ID        int
 	Subtotal  int
+	Qty       int
 	Productid int
 }
 
