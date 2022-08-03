@@ -5,7 +5,6 @@ import (
 	"altaproject2/features/common"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -80,8 +79,6 @@ func (cs *cartHandler) Post() echo.HandlerFunc {
 func (ch *cartHandler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var updatecart CartFormat
-		id := c.Param("productId")
-		cnv, _ := strconv.Atoi(id)
 		bind := c.Bind(&updatecart)
 
 		if bind != nil {
@@ -92,7 +89,7 @@ func (ch *cartHandler) Update() echo.HandlerFunc {
 			})
 		}
 
-		status := ch.cartUseCase.UpdateData(updatecart.ToModel(), cnv)
+		status := ch.cartUseCase.UpdateData(updatecart.ToModel(), updatecart.Productid)
 
 		if status == 400 {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
