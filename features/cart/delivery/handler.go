@@ -25,8 +25,39 @@ func (*cartHandler) Delete() echo.HandlerFunc {
 }
 
 // Get implements domain.CartHandler
-func (*cartHandler) Get() echo.HandlerFunc {
-	panic("unimplemented")
+func (cs *cartHandler) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var arrmap []map[string]interface{}
+		token := common.ExtractData(c)
+		id := token.ID
+
+		data, dataproduct, status := cs.cartUseCase.GetCart(id)
+
+		if status == 404 {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    status,
+				"message": "Data not found",
+			})
+		}
+
+		for i := 0; i < len(dataproduct); i++ {
+			var res = map[string]interface{}{}
+			res["productphoto"] = dataproduct[i].ProductPic
+			res["productname"] = dataproduct[i].ProductName
+			res["price"] = dataproduct[i].Price
+			res["stock"] = dataproduct[i].Stock
+			res["quantity"] = dataproduct[i].Quantity
+			res["subtototal"] = dataproduct[i].Subtotal
+			arrmap = append(arrmap, res)
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"userid":  data.Userid,
+			"data":    arrmap,
+			"code":    status,
+			"message": "Success Get All cart",
+		})
+	}
 }
 
 // Post implements domain.CartHandler

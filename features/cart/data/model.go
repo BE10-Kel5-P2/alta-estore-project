@@ -14,6 +14,16 @@ type Cart struct {
 	Subtotal  int
 }
 
+type CartProduct struct {
+	ProductName string
+	Description string
+	Price       int
+	ProductPic  string
+	Stock       int
+	Quantity    int
+	Subtotal    int
+}
+
 func (u *Cart) ToModel() domain.Cart {
 	return domain.Cart{
 		ID:        int(u.ID),
@@ -24,11 +34,32 @@ func (u *Cart) ToModel() domain.Cart {
 	}
 }
 
+func (u *CartProduct) ToModelCartProduct() domain.CartProduct {
+	return domain.CartProduct{
+		ProductName: u.ProductName,
+		Description: u.Description,
+		Price:       u.Price,
+		ProductPic:  u.ProductPic,
+		Stock:       u.Stock,
+		Quantity:    u.Quantity,
+		Subtotal:    u.Subtotal,
+	}
+}
+
 func ParseToArr(arr []Cart) []domain.Cart {
 	var res []domain.Cart
 
 	for _, val := range arr {
 		res = append(res, val.ToModel())
+	}
+	return res
+}
+
+func ParseToArrProduct(arr []CartProduct) []domain.CartProduct {
+	var res []domain.CartProduct
+
+	for _, val := range arr {
+		res = append(res, val.ToModelCartProduct())
 	}
 	return res
 }
