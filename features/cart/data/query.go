@@ -2,6 +2,7 @@ package data
 
 import (
 	"altaproject2/domain"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +33,19 @@ func (*cartData) PostData() {
 }
 
 // UpdateData implements domain.CartData
-func (*cartData) UpdateData() {
-	panic("unimplemented")
+func (cd *cartData) UpdateData(newUpdate domain.Cart, productID int) domain.Cart {
+	var cart = FromModel(newUpdate)
+	err := cd.db.Model(&Cart{}).Where("Productid = ?", productID).Updates(cart)
+
+	if err.Error != nil {
+		log.Println("Cant update cart object", err.Error.Error())
+		return domain.Cart{}
+	}
+
+	if err.RowsAffected == 0 {
+		log.Println("Data Not Found")
+		return domain.Cart{}
+	}
+
+	return cart.ToModel()
 }

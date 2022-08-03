@@ -17,14 +17,14 @@ type CartHandler interface {
 
 type CartUseCase interface {
 	PostCart()
-	UpdateCart()
+	UpdateData(newUpdate Cart, productId int) int
 	GetCart()
 	DeleteCart()
 }
 
 type CartData interface {
 	PostData()
-	UpdateData()
+	UpdateData(newUpdate Cart, productId int) Cart
 	GetData()
 	DeleteData()
 }
