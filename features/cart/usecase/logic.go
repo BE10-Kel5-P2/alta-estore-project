@@ -4,11 +4,8 @@ import (
 	"altaproject2/domain"
 	"altaproject2/features/cart/data"
 	"log"
-<<<<<<< HEAD
-=======
 
 	"github.com/go-playground/validator/v10"
->>>>>>> 938b75b (tambah fitur post cart)
 )
 
 type cartCase struct {

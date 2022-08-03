@@ -12,22 +12,12 @@ type Cart struct {
 	Productid int `json:"productid" form:"productid" validate:"required"`
 	Quantity  int `json:"quantity" form:"quantity" validate:"required"`
 	Subtotal  int
-<<<<<<< HEAD
-	Qty       int
-	Productid int
-=======
->>>>>>> 938b75b (tambah fitur post cart)
 }
 
 func (u *Cart) ToModel() domain.Cart {
 	return domain.Cart{
 		ID:        int(u.ID),
-<<<<<<< HEAD
-		Subtotal:  u.Subtotal,
-		Qty:       u.Qty,
-=======
 		Userid:    u.Userid,
->>>>>>> 938b75b (tambah fitur post cart)
 		Productid: u.Productid,
 		Quantity:  u.Quantity,
 		Subtotal:  u.Subtotal,
@@ -50,10 +40,5 @@ func FromModel(data domain.Cart) Cart {
 	res.Productid = data.Productid
 	res.Quantity = data.Quantity
 	res.Subtotal = data.Subtotal
-<<<<<<< HEAD
-	res.Qty = data.Qty
-	res.Productid = data.Subtotal
-=======
->>>>>>> 938b75b (tambah fitur post cart)
 	return res
 }
