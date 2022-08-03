@@ -230,7 +230,7 @@ func (ps *productHandler) GetItems() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"data":    arrmap,
 			"code":    status,
-			"message": "Data not found",
+			"message": "Success Get All Data product",
 		})
 	}
 }
