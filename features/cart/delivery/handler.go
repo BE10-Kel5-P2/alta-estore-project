@@ -20,7 +20,7 @@ func New(cs domain.CartUseCase) domain.CartHandler {
 }
 
 // Delete implements domain.CartHandler
-func (cs *cartHandler) DeleteCart() echo.HandlerFunc {
+func (cs *cartHandler) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := common.ExtractData(c)
 
@@ -36,19 +36,51 @@ func (cs *cartHandler) DeleteCart() echo.HandlerFunc {
 		if !status {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"code":    500,
-				"message": "There is an error in internal server",
+				"message": "Internal server error",
 			})
 		}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"code":    200,
-			"message": "success delete product",
+			"message": "Success delete product",
 		})
 	}
 }
 
 // Get implements domain.CartHandler
-func (*cartHandler) Get() echo.HandlerFunc {
-	panic("unimplemented")
+func (cs *cartHandler) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var arrmap []map[string]interface{}
+		token := common.ExtractData(c)
+		id := token.ID
+
+		data, dataproduct, status := cs.cartUseCase.GetCart(id)
+
+		if status == 404 {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    status,
+				"message": "Data not found",
+			})
+		}
+
+		for i := 0; i < len(dataproduct); i++ {
+			var res = map[string]interface{}{}
+			res["productphoto"] = dataproduct[i].ProductPic
+			res["productname"] = dataproduct[i].ProductName
+			res["price"] = dataproduct[i].Price
+			res["stock"] = dataproduct[i].Stock
+			res["quantity"] = dataproduct[i].Quantity
+			res["subtototal"] = dataproduct[i].Subtotal
+			arrmap = append(arrmap, res)
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"userid":  data.Userid,
+			"data":    arrmap,
+			"code":    status,
+			"message": "Success Get All cart",
+		})
+	}
 }
 
 // Post implements domain.CartHandler
