@@ -10,6 +10,16 @@ type Cart struct {
 	Quantity  int
 }
 
+type CartProduct struct {
+	ProductName string
+	Description string
+	Price       int
+	ProductPic  string
+	Stock       int
+	Quantity    int
+	Subtotal    int
+}
+
 type CartHandler interface {
 	Post() echo.HandlerFunc
 	Update() echo.HandlerFunc
@@ -20,13 +30,15 @@ type CartHandler interface {
 type CartUseCase interface {
 	UpdateData(newUpdate Cart, productId int) int
 	PostCart(newcart Cart) int
-	GetCart()
+	GetCart(userid int) (Cart, []CartProduct, int)
 	DeleteCart()
 }
 
 type CartData interface {
 	UpdateData(newUpdate Cart, productId int) Cart
 	PostData(newcart Cart) Cart
-	GetData()
+	GetData(userid int) Cart
+	GetDataProduct(userid int) []CartProduct
 	DeleteData()
+	CheckDuplicate(newcart Cart) bool
 }
