@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"altaproject2/config"
+	cartdata "altaproject2/features/cart/data"
 	productdata "altaproject2/features/product/data"
 	userdata "altaproject2/features/user/data"
 	"fmt"
@@ -25,5 +26,5 @@ func InitDB(cfg *config.Appconfig) *gorm.DB {
 }
 
 func MigrateDB(db *gorm.DB) {
-	db.AutoMigrate(userdata.User{}, productdata.Product{})
+	db.AutoMigrate(userdata.User{}, productdata.Product{}, cartdata.Cart{})
 }

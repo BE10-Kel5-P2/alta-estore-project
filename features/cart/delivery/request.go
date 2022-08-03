@@ -3,15 +3,17 @@ package delivery
 import "altaproject2/domain"
 
 type CartFormat struct {
-	Subtotal  int `json:"subtotal" form:"subtotal" validate:"required"`
-	Qty       int `json:"qty" form:"qty" validate:"required"`
-	Productid int `json:"productid" form:"productid" validate:"required"`
+	Userid    int
+	Productid int `json:"productid" form:"productid"`
+	Quantity  int `json:"quantity" form:"quantity"`
+	Subtotal  int
 }
 
 func (i *CartFormat) ToModel() domain.Cart {
 	return domain.Cart{
-		Subtotal:  i.Subtotal,
-		Qty:       i.Qty,
+		Userid:    i.Userid,
 		Productid: i.Productid,
+		Quantity:  i.Quantity,
+		Subtotal:  i.Subtotal,
 	}
 }

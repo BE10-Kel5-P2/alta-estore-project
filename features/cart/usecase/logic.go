@@ -4,15 +4,22 @@ import (
 	"altaproject2/domain"
 	"altaproject2/features/cart/data"
 	"log"
+<<<<<<< HEAD
+=======
+
+	"github.com/go-playground/validator/v10"
+>>>>>>> 938b75b (tambah fitur post cart)
 )
 
 type cartCase struct {
 	cartData domain.CartData
+	valid    *validator.Validate
 }
 
-func New(pd domain.CartData) domain.CartUseCase {
+func New(cd domain.CartData, val *validator.Validate) domain.CartUseCase {
 	return &cartCase{
-		cartData: pd,
+		cartData: cd,
+		valid:    val,
 	}
 }
 
@@ -27,8 +34,24 @@ func (*cartCase) GetCart() {
 }
 
 // PostCart implements domain.CartUseCase
-func (*cartCase) PostCart() {
-	panic("unimplemented")
+func (cd *cartCase) PostCart(newcart domain.Cart) int {
+	var cartdata = data.FromModel(newcart)
+
+	validError := cd.valid.Struct(cartdata)
+
+	if validError != nil {
+		log.Println("Validation errror : ", validError)
+		return 400
+	}
+
+	insert := cd.cartData.PostData(cartdata.ToModel())
+
+	if insert.ID == 0 {
+		log.Println("Empty data")
+		return 404
+	}
+
+	return 200
 }
 
 // UpdateCart implements domain.CartUseCase

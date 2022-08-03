@@ -10,6 +10,7 @@ type User struct {
 	PhotoProfile string
 	Password     string
 	Role         string
+	Cart         []Cart
 }
 
 type UserHandler interface {

@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"altaproject2/domain"
+	"altaproject2/features/common"
 	"log"
 	"net/http"
 	"strconv"
@@ -13,9 +14,9 @@ type cartHandler struct {
 	cartUseCase domain.CartUseCase
 }
 
-func New(ps domain.CartUseCase) domain.CartHandler {
+func New(cs domain.CartUseCase) domain.CartHandler {
 	return &cartHandler{
-		cartUseCase: ps,
+		cartUseCase: cs,
 	}
 }
 
@@ -30,8 +31,42 @@ func (*cartHandler) Get() echo.HandlerFunc {
 }
 
 // Post implements domain.CartHandler
-func (*cartHandler) Post() echo.HandlerFunc {
-	panic("unimplemented")
+func (cs *cartHandler) Post() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var newcart CartFormat
+		token := common.ExtractData(c)
+		newcart.Userid = token.ID
+		bind := c.Bind(&newcart)
+
+		if bind != nil {
+			log.Println("cant bind")
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "There is an error in internal server",
+			})
+		}
+
+		status := cs.cartUseCase.PostCart(newcart.ToModel())
+
+		if status == 400 {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    status,
+				"message": "Wrong input",
+			})
+		}
+
+		if status == 500 {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    status,
+				"message": "There is an error in internal server",
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    status,
+			"message": "Success add item",
+		})
+	}
 }
 
 // Update implements domain.CartHandler

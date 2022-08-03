@@ -33,7 +33,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session) {
 	pdeli.RouteProduct(e, postHandler)
 
 	cartData := cd.New(db)
-	cartCase := cc.New(cartData)
+	cartCase := cc.New(cartData, valid)
 	cartHandler := cdeli.New(cartCase)
 	cdeli.RouteCart(e, cartHandler)
 }
