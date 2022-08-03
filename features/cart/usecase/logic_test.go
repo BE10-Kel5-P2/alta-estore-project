@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestUpdateProduct(t *testing.T) {
@@ -22,5 +23,19 @@ func TestUpdateProduct(t *testing.T) {
 		res := useCase.UpdateData(mockData, 1)
 
 		assert.Equal(t, 200, res)
+	})
+}
+
+func TestDeleteCart(t *testing.T) {
+	repo := new(mocks.CartData)
+
+	t.Run("Succes delete", func(t *testing.T) {
+		repo.On("DeleteData", mock.Anything).Return(true).Once()
+		cartcase := New(repo, validator.New())
+		delete, err := cartcase.DeleteCart(1)
+
+		assert.Nil(t, err)
+		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
 	})
 }
