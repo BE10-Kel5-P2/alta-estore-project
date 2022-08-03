@@ -20,8 +20,31 @@ func New(cs domain.CartUseCase) domain.CartHandler {
 }
 
 // Delete implements domain.CartHandler
-func (*cartHandler) Delete() echo.HandlerFunc {
-	panic("unimplemented")
+func (cs *cartHandler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := common.ExtractData(c)
+
+		status, err := cs.cartUseCase.DeleteCart(data.ID)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+
+		if !status {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "Internal server error",
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "Success delete product",
+		})
+	}
 }
 
 // Get implements domain.CartHandler

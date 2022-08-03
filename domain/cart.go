@@ -31,7 +31,7 @@ type CartUseCase interface {
 	UpdateData(newUpdate Cart, productId int) int
 	PostCart(newcart Cart) int
 	GetCart(userid int) (Cart, []CartProduct, int)
-	DeleteCart()
+	DeleteCart(productID int) (bool, error)
 }
 
 type CartData interface {
@@ -39,6 +39,6 @@ type CartData interface {
 	PostData(newcart Cart) Cart
 	GetData(userid int) Cart
 	GetDataProduct(userid int) []CartProduct
-	DeleteData()
 	CheckDuplicate(newcart Cart) bool
+	DeleteData(productID int) bool
 }

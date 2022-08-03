@@ -3,6 +3,7 @@ package usecase
 import (
 	"altaproject2/domain"
 	"altaproject2/features/cart/data"
+	"errors"
 	"log"
 
 	"github.com/go-playground/validator/v10"
@@ -21,8 +22,13 @@ func New(cd domain.CartData, val *validator.Validate) domain.CartUseCase {
 }
 
 // Delete implements domain.CartUseCase
-func (*cartCase) DeleteCart() {
-	panic("unimplemented")
+func (cd *cartCase) DeleteCart(productId int) (bool, error) {
+	res := cd.cartData.DeleteData(productId)
+
+	if !res {
+		return false, errors.New("failed to delete cart")
+	}
+	return true, nil
 }
 
 // GetCart implements domain.CartUseCase
