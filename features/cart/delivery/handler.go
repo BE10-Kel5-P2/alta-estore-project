@@ -55,6 +55,13 @@ func (cs *cartHandler) Post() echo.HandlerFunc {
 			})
 		}
 
+		if status == 404 {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    status,
+				"message": "Data not found",
+			})
+		}
+
 		if status == 500 {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"code":    status,
