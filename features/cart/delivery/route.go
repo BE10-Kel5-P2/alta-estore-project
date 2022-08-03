@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func RouteCart(e *echo.Echo, ph domain.CartHandler) {
+func RouteCart(e *echo.Echo, ch domain.CartHandler) {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
@@ -17,5 +17,6 @@ func RouteCart(e *echo.Echo, ph domain.CartHandler) {
 	}))
 	e.Pre(middleware.RemoveTrailingSlash())
 
-	e.PUT("/carts", ph.Update(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.PUT("/carts", ch.Update(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.POST("/carts", ch.Post(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }

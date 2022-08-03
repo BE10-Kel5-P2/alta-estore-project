@@ -28,8 +28,16 @@ func (*cartData) GetData() {
 }
 
 // PostData implements domain.CartData
-func (*cartData) PostData() {
-	panic("unimplemented")
+func (cd *cartData) PostData(newcart domain.Cart) domain.Cart {
+	var cartdata = FromModel(newcart)
+	err := cd.db.Create(&cartdata).Error
+
+	if err != nil {
+		log.Println("Cant create user object", err.Error())
+		return domain.Cart{}
+	}
+
+	return cartdata.ToModel()
 }
 
 // UpdateData implements domain.CartData
