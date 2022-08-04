@@ -27,13 +27,13 @@ func (_m *CartData) CheckDuplicate(newcart domain.Cart) bool {
 	return r0
 }
 
-// DeleteData provides a mock function with given fields: productID
-func (_m *CartData) DeleteData(productID int) bool {
-	ret := _m.Called(productID)
+// DeleteData provides a mock function with given fields: userID, productID
+func (_m *CartData) DeleteData(userID int, productID int) bool {
+	ret := _m.Called(userID, productID)
 
 	var r0 bool
-	if rf, ok := ret.Get(0).(func(int) bool); ok {
-		r0 = rf(productID)
+	if rf, ok := ret.Get(0).(func(int, int) bool); ok {
+		r0 = rf(userID, productID)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}

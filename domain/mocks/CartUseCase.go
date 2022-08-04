@@ -13,20 +13,20 @@ type CartUseCase struct {
 	mock.Mock
 }
 
-// DeleteCart provides a mock function with given fields: productID
-func (_m *CartUseCase) DeleteCart(productID int) (bool, error) {
-	ret := _m.Called(productID)
+// DeleteCart provides a mock function with given fields: userID, productID
+func (_m *CartUseCase) DeleteCart(userID int, productID int) (bool, error) {
+	ret := _m.Called(userID, productID)
 
 	var r0 bool
-	if rf, ok := ret.Get(0).(func(int) bool); ok {
-		r0 = rf(productID)
+	if rf, ok := ret.Get(0).(func(int, int) bool); ok {
+		r0 = rf(userID, productID)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(productID)
+	if rf, ok := ret.Get(1).(func(int, int) error); ok {
+		r1 = rf(userID, productID)
 	} else {
 		r1 = ret.Error(1)
 	}

@@ -22,8 +22,8 @@ func New(cd domain.CartData, val *validator.Validate) domain.CartUseCase {
 }
 
 // Delete implements domain.CartUseCase
-func (cd *cartCase) DeleteCart(productId int) (bool, error) {
-	res := cd.cartData.DeleteData(productId)
+func (cd *cartCase) DeleteCart(userID int, productId int) (bool, error) {
+	res := cd.cartData.DeleteData(userID, productId)
 
 	if !res {
 		return false, errors.New("failed to delete cart")
