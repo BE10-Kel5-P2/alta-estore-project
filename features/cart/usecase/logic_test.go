@@ -30,9 +30,9 @@ func TestDeleteCart(t *testing.T) {
 	repo := new(mocks.CartData)
 
 	t.Run("Succes delete", func(t *testing.T) {
-		repo.On("DeleteData", mock.Anything).Return(true).Once()
+		repo.On("DeleteData", mock.Anything, mock.Anything).Return(true).Once()
 		cartcase := New(repo, validator.New())
-		delete, err := cartcase.DeleteCart(1)
+		delete, err := cartcase.DeleteCart(1, 1)
 
 		assert.Nil(t, err)
 		assert.Equal(t, true, delete)

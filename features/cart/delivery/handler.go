@@ -5,6 +5,7 @@ import (
 	"altaproject2/features/common"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -24,7 +25,9 @@ func (cs *cartHandler) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := common.ExtractData(c)
 
-		status, err := cs.cartUseCase.DeleteCart(data.ID)
+		id := c.Param("id")
+		cnv, err := strconv.Atoi(id)
+		status, err := cs.cartUseCase.DeleteCart(data.ID, cnv)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{

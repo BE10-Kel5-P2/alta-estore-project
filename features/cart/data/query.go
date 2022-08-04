@@ -18,8 +18,8 @@ type cartData struct {
 }
 
 // DeleteData implements domain.CartData
-func (cd *cartData) DeleteData(productID int) bool {
-	err := cd.db.Where("ID = ?", productID).Delete(&Cart{})
+func (cd *cartData) DeleteData(userID int, productID int) bool {
+	err := cd.db.Where("userID = ? AND productID = ?", userID, productID).Delete(&Cart{})
 
 	if err.Error != nil {
 		log.Println("cannot delete data", err.Error.Error())
