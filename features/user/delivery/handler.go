@@ -104,17 +104,6 @@ func (us *userHandler) Register() echo.HandlerFunc {
 			})
 		}
 
-		file, err := c.FormFile("photoprofile")
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		filename := fmt.Sprintf("%s_profilepic.jpg", newuser.Username)
-		log.Println(filename)
-		link := awss3.DoUpload(us.conn, *file, filename)
-		newuser.Photoprofile = link
-
 		status := us.userUsecase.RegisterUser(newuser.ToModel(), cost)
 
 		if status == 400 {
@@ -203,9 +192,10 @@ func (us *userHandler) Update() echo.HandlerFunc {
 
 func (uh *userHandler) GetProfile() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var arrmap = []map[string]interface{}{}
 		usr := common.ExtractData(c)
 
-		data, err := uh.userUsecase.GetProfile(usr.ID)
+		data, datauc, err := uh.userUsecase.GetProfile(usr.ID)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, map[string]interface{}{
@@ -213,9 +203,20 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 				"message": "Data not found",
 			})
 		}
+
+		for i := 0; i < len(datauc); i++ {
+			var res = map[string]interface{}{}
+			res["productname"] = datauc[i].ProductName
+			res["quantity"] = datauc[i].Quantity
+			res["totalprice"] = datauc[i].Subtotal
+
+			arrmap = append(arrmap, res)
+		}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"username":     data.Username,
 			"photoprofile": data.PhotoProfile,
+			"data":         arrmap,
 			"code":         200,
 			"message":      "get data success",
 		})

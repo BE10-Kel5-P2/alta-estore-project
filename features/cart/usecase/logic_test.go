@@ -39,3 +39,90 @@ func TestDeleteCart(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestCreateCart(t *testing.T) {
+	repo := new(mocks.CartData)
+	mockData := domain.Cart{Userid: 1, Subtotal: 50000, Quantity: 2, Productid: 1}
+
+	returnData := mockData
+	returnData.ID = 1
+
+	invalidData := mockData
+	invalidData.Productid = 0
+
+	t.Run("Success create", func(t *testing.T) {
+		repo.On("CheckDuplicate", mock.Anything).Return(false).Once()
+		repo.On("PostData", mock.Anything).Return(returnData).Once()
+		cartcase := New(repo, validator.New())
+		status := cartcase.PostCart(mockData)
+
+		assert.Equal(t, 200, status)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Validator error", func(t *testing.T) {
+
+		cartcase := New(repo, validator.New())
+		status := cartcase.PostCart(invalidData)
+
+		assert.Equal(t, 400, status)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Duplicated data", func(t *testing.T) {
+		repo.On("CheckDuplicate", mock.Anything).Return(true).Once()
+		cartcase := New(repo, validator.New())
+		status := cartcase.PostCart(mockData)
+
+		assert.Equal(t, 400, status)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Empty Data", func(t *testing.T) {
+		returnData.ID = 0
+		repo.On("CheckDuplicate", mock.Anything).Return(false).Once()
+		repo.On("PostData", mock.Anything).Return(returnData).Once()
+		cartcase := New(repo, validator.New())
+		status := cartcase.PostCart(mockData)
+
+		assert.Equal(t, 404, status)
+		repo.AssertExpectations(t)
+	})
+}
+
+func TestUpdateCart(t *testing.T) {
+	repo := new(mocks.CartData)
+	mockData := domain.Cart{Userid: 1, Subtotal: 50000, Quantity: 2, Productid: 1}
+
+	returnData := mockData
+	returnData.ID = 1
+
+	invalidData := mockData
+	invalidData.ID = 0
+
+	t.Run("Success update", func(t *testing.T) {
+		repo.On("UpdateData", mock.Anything, mock.Anything).Return(returnData).Once()
+		cartcase := New(repo, validator.New())
+		status := cartcase.UpdateData(mockData, 1)
+
+		assert.Equal(t, 200, status)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("no productid", func(t *testing.T) {
+		cartcase := New(repo, validator.New())
+		status := cartcase.UpdateData(mockData, 0)
+
+		assert.Equal(t, 404, status)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		repo.On("UpdateData", mock.Anything, mock.Anything).Return(invalidData).Once()
+		cartcase := New(repo, validator.New())
+		status := cartcase.UpdateData(mockData, 1)
+
+		assert.Equal(t, 404, status)
+		repo.AssertExpectations(t)
+	})
+}

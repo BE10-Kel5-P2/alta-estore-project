@@ -118,17 +118,19 @@ func (ud *userCase) UpdateUser(newuser domain.User, userid int, cost int) int {
 	return 200
 }
 
-func (ud *userCase) GetProfile(id int) (domain.User, error) {
+func (ud *userCase) GetProfile(id int) (domain.User, []domain.UserCart, error) {
+	datauc := ud.userData.GetUserCartData(id)
+
 	data, err := ud.userData.GetProfile(id)
 
 	if err != nil {
 		log.Println("Use case", err.Error())
 		if err == gorm.ErrRecordNotFound {
-			return domain.User{}, errors.New("data not found")
+			return domain.User{}, nil, errors.New("data not found")
 		} else {
-			return domain.User{}, errors.New("server error")
+			return domain.User{}, nil, errors.New("server error")
 		}
 	}
 
-	return data, nil
+	return data, datauc, nil
 }

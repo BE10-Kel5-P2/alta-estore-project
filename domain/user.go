@@ -14,6 +14,12 @@ type User struct {
 	Order        []Order
 }
 
+type UserCart struct {
+	ProductName string
+	Quantity    int
+	Subtotal    int
+}
+
 type UserHandler interface {
 	Login() echo.HandlerFunc
 	DeleteUser() echo.HandlerFunc
@@ -27,7 +33,7 @@ type UserUseCase interface {
 	Delete(userID int) (bool, error)
 	RegisterUser(newuser User, cost int) int
 	UpdateUser(newuser User, userid, cost int) int
-	GetProfile(id int) (User, error)
+	GetProfile(id int) (User, []UserCart, error)
 }
 
 type UserData interface {
@@ -38,4 +44,5 @@ type UserData interface {
 	CheckDuplicate(newuser User) bool
 	GetPasswordData(name string) string
 	GetProfile(userID int) (User, error)
+	GetUserCartData(id int) []UserCart
 }

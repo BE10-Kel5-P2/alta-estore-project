@@ -20,10 +20,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/midtrans/midtrans-go/snap"
 	"gorm.io/gorm"
 )
 
-func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session) {
+func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session, midconn snap.Client) {
 	valid := validator.New()
 
 	userData := ud.New(db)
@@ -42,7 +43,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB, awsConn *session.Session) {
 	cdeli.RouteCart(e, cartHandler)
 
 	orderData := od.New(db)
-	orderCase := oc.New(orderData)
+	orderCase := oc.New(orderData, midconn)
 	orderHandler := odeli.New(orderCase)
 	odeli.RouteOrder(e, orderHandler)
 }

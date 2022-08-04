@@ -10,14 +10,15 @@ import (
 )
 
 type Appconfig struct {
-	Username string
-	Password string
-	Address  string
-	Port     int
-	DBName   string
-	Keys3    string
-	Secrets3 string
-	Regions3 string
+	Username  string
+	Password  string
+	Address   string
+	Port      int
+	DBName    string
+	Keys3     string
+	Secrets3  string
+	Regions3  string
+	Midserver string
 }
 
 var (
@@ -60,5 +61,6 @@ func initConfig() *Appconfig {
 	defaultconfig.Keys3 = os.Getenv("Keys3")
 	defaultconfig.Secrets3 = os.Getenv("Secrets3")
 	defaultconfig.Regions3 = os.Getenv("Regions3")
+	defaultconfig.Midserver = os.Getenv("Midserver")
 	return &defaultconfig
 }

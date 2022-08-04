@@ -3,20 +3,21 @@ package domain
 import "github.com/labstack/echo/v4"
 
 type Order struct {
-	ID      int
-	Userid  int
-	Total   int
-	Product []Product
+	ID     int
+	Userid int
+	Total  int
+	Data   []ProductOrders
 }
 
-type HistoryOrder struct {
-	ProductName string
-	Description string
-	Price       int
-	ProductPic  string
-	Qty         int
-	Subtotal    int
-	Address     string
+type ProductOrders struct {
+	ID        int
+	Orderid   int
+	Productid int
+	Price     int
+	Quantity  int
+	Subtotal  int
+	Status    int
+	Payment   string
 }
 
 type OrderHandler interface {
@@ -26,13 +27,16 @@ type OrderHandler interface {
 }
 
 type OrderUseCase interface {
-	PostOrder()
+	PostOrder(neworder Order, data []ProductOrders) (int, string)
+	Sum(neworder Order) int
 	GetOrder()
 	DeleteOrder()
 }
 
 type OrderData interface {
-	PostOrderData()
+	PostOrderData(neworder Order) int
+	PostProductOrderData(newpo []ProductOrders) []ProductOrders
+	SumTotalPrice(neworder Order) int
 	GetOrderData()
 	DeleteOrderData()
 }

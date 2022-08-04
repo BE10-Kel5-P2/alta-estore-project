@@ -3,15 +3,15 @@ package domain
 import "github.com/labstack/echo/v4"
 
 type Product struct {
-	ID          int
-	ProductName string
-	Description string
-	Price       int
-	ProductPic  string
-	Stock       int
-	Qty         int
-	Cart        []Cart
-	Order       []Order
+	ID            int
+	ProductName   string
+	Description   string
+	Price         int
+	ProductPic    string
+	Stock         int
+	Qty           int
+	Cart          []Cart
+	ProductOrders []ProductOrders
 }
 
 type ProductHandler interface {
