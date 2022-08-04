@@ -11,6 +11,7 @@ type Product struct {
 	Stock       int
 	Qty         int
 	Cart        []Cart
+	Order       []Order
 }
 
 type ProductHandler interface {

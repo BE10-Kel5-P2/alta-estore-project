@@ -11,6 +11,7 @@ type User struct {
 	Password     string
 	Role         string
 	Cart         []Cart
+	Order        []Order
 }
 
 type UserHandler interface {
