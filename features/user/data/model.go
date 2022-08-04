@@ -2,7 +2,8 @@ package data
 
 import (
 	"altaproject2/domain"
-	"altaproject2/features/cart/data"
+	cartdata "altaproject2/features/cart/data"
+	"altaproject2/features/order/data"
 
 	"gorm.io/gorm"
 )
@@ -15,8 +16,8 @@ type User struct {
 	PhotoProfile string `json:"photoprofile" form:"photoprofile"`
 	Password     string `json:"password" form:"password" validate:"required"`
 	Role         string
-	Cart         []data.Cart `gorm:"foreignKey:Userid"`
-	// MyOrder []data.Order
+	Cart         []cartdata.Cart `gorm:"foreignKey:Userid"`
+	MyOrder      []data.Order    `gorm:"foreignKey:Userid"`
 }
 
 func (u *User) ToModel() domain.User {
