@@ -8,6 +8,7 @@ type Cart struct {
 	Userid    int
 	Productid int
 	Quantity  int
+	Order     []Order
 }
 
 type CartProduct struct {
