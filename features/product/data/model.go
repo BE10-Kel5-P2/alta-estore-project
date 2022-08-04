@@ -3,19 +3,21 @@ package data
 import (
 	"altaproject2/domain"
 	cartdata "altaproject2/features/cart/data"
+	"altaproject2/features/order/data"
 
 	"gorm.io/gorm"
 )
 
 type Product struct {
 	gorm.Model
-	ProductName string `json:"productname" form:"productname" validate:"required"`
-	Description string `json:"description" form:"description" validate:"required"`
-	Price       int    `json:"price" form:"price" validate:"required"`
-	ProductPic  string `json:"productpic" form:"productpic" validate:"required"`
-	Stock       int    `json:"stock" form:"stock" validate:"required"`
-	Qty         int
-	Cart        []cartdata.Cart `gorm:"foreignKey:Productid"`
+	ProductName   string `json:"productname" form:"productname" validate:"required"`
+	Description   string `json:"description" form:"description" validate:"required"`
+	Price         int    `json:"price" form:"price" validate:"required"`
+	ProductPic    string `json:"productpic" form:"productpic" validate:"required"`
+	Stock         int    `json:"stock" form:"stock" validate:"required"`
+	Qty           int
+	Cart          []cartdata.Cart      `gorm:"foreignKey:Productid"`
+	ProductOrders []data.ProductOrders `gorm:"foreignKey:Productid"`
 }
 
 func (u *Product) ToModel() domain.Product {

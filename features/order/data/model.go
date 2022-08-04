@@ -2,26 +2,26 @@ package data
 
 import (
 	"altaproject2/domain"
-	"altaproject2/features/product/data"
 
 	"gorm.io/gorm"
 )
 
 type Order struct {
 	gorm.Model
-	Userid  int
-	Total   int
-	Product []*data.Product `gorm:"many2many:product_orders;"`
+	Userid int
+	Total  int
+	Data   []ProductOrders `json:"data" gorm:"foreignKey:Orderid"`
 }
 
-type HistoryOrder struct {
-	ProductName string
-	Description string
-	Price       int
-	ProductPic  string
-	Qty         int
-	Subtotal    int
-	Address     string
+type ProductOrders struct {
+	gorm.Model
+	Orderid   int
+	Productid int `json:"productid" form:"productid"`
+	Price     int `json:"price" form:"price"`
+	Quantity  int `json:"quantity" form:"quantity"`
+	Subtotal  int `json:"subtotal" form:"subtotal"`
+	Status    int `json:"status" form:"status"`
+	Payment   string
 }
 
 func (o *Order) ToModel() domain.Order {
@@ -31,24 +31,24 @@ func (o *Order) ToModel() domain.Order {
 	}
 }
 
-func (o *HistoryOrder) ToModelHistoryOrder() domain.HistoryOrder {
-	return domain.HistoryOrder{
-		ProductName: o.ProductName,
-		Description: o.Description,
-		Price:       o.Price,
-		ProductPic:  o.ProductPic,
-		Qty:         o.Qty,
-		Subtotal:    o.Subtotal,
-		Address:     o.Address,
+func (o *ProductOrders) ToModelProductOrders() domain.ProductOrders {
+	return domain.ProductOrders{
+		Orderid:   o.Orderid,
+		Productid: o.Orderid,
+		Price:     o.Price,
+		Quantity:  o.Quantity,
+		Subtotal:  o.Subtotal,
+		Status:    o.Status,
 	}
 }
 
-func (o *Order) ParseToArr(arr []HistoryOrder) []domain.HistoryOrder {
-	var res []domain.HistoryOrder
+func ParseToArr(arr []Order) []domain.Order {
+	var res []domain.Order
 
 	for _, val := range arr {
-		res = append(res, val.ToModelHistoryOrder())
+		res = append(res, val.ToModel())
 	}
+
 	return res
 }
 

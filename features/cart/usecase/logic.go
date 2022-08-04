@@ -83,7 +83,12 @@ func (cc *cartCase) UpdateData(newUpdate domain.Cart, productId int) int {
 
 	cart.Productid = int(productId)
 
-	cc.cartData.UpdateData(cart.ToModel(), productId)
+	update := cc.cartData.UpdateData(cart.ToModel(), productId)
+
+	if update.ID == 0 {
+		log.Println("Data not found")
+		return 404
+	}
 
 	return 200
 }
