@@ -35,7 +35,7 @@ func (_m *UserUseCase) Delete(userID int) (bool, error) {
 }
 
 // GetProfile provides a mock function with given fields: id
-func (_m *UserUseCase) GetProfile(id int) (domain.User, error) {
+func (_m *UserUseCase) GetProfile(id int) (domain.User, []domain.UserCart, error) {
 	ret := _m.Called(id)
 
 	var r0 domain.User
@@ -45,14 +45,23 @@ func (_m *UserUseCase) GetProfile(id int) (domain.User, error) {
 		r0 = ret.Get(0).(domain.User)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
+	var r1 []domain.UserCart
+	if rf, ok := ret.Get(1).(func(int) []domain.UserCart); ok {
 		r1 = rf(id)
 	} else {
-		r1 = ret.Error(1)
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).([]domain.UserCart)
+		}
 	}
 
-	return r0, r1
+	var r2 error
+	if rf, ok := ret.Get(2).(func(int) error); ok {
+		r2 = rf(id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }
 
 // Login provides a mock function with given fields: userdata

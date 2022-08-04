@@ -76,6 +76,22 @@ func (_m *UserData) GetProfile(userID int) (domain.User, error) {
 	return r0, r1
 }
 
+// GetUserCartData provides a mock function with given fields: id
+func (_m *UserData) GetUserCartData(id int) []domain.UserCart {
+	ret := _m.Called(id)
+
+	var r0 []domain.UserCart
+	if rf, ok := ret.Get(0).(func(int) []domain.UserCart); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.UserCart)
+		}
+	}
+
+	return r0
+}
+
 // Login provides a mock function with given fields: userdata
 func (_m *UserData) Login(userdata domain.User) domain.User {
 	ret := _m.Called(userdata)
