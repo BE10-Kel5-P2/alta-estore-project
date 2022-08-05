@@ -25,11 +25,6 @@ func New(ud domain.UserData, val *validator.Validate) domain.UserUseCase {
 }
 
 func (ud *userCase) Login(userdata domain.User) (domain.User, error) {
-	login := ud.userData.Login(userdata)
-
-	if login.ID == 0 {
-		return domain.User{}, errors.New("no data")
-	}
 
 	hashpw := ud.userData.GetPasswordData(userdata.Username)
 
@@ -38,6 +33,12 @@ func (ud *userCase) Login(userdata domain.User) (domain.User, error) {
 	if err != nil {
 		log.Println(bcrypt.ErrMismatchedHashAndPassword, err)
 		return domain.User{}, err
+	}
+
+	login := ud.userData.Login(userdata)
+
+	if login.ID == 0 {
+		return domain.User{}, errors.New("no data")
 	}
 
 	return login, nil

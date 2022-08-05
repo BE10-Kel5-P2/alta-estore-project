@@ -34,7 +34,7 @@ func (od *orderData) SumTotalPrice(neworder domain.Order) int {
 
 // PostProductOrderData implements domain.OrderData
 func (od *orderData) PostProductOrderData(newpo []domain.ProductOrders) []domain.ProductOrders {
-	var stock int
+
 	err := od.db.Create(&newpo)
 
 	if err.Error != nil {
@@ -42,8 +42,8 @@ func (od *orderData) PostProductOrderData(newpo []domain.ProductOrders) []domain
 		return nil
 	}
 
-	log.Println(stock)
 	od.db.Exec("update product_orders join products on product_orders.productid = products.id set products.stock = products.stock - product_orders.quantity where product_orders.productid = 1")
+	od.db.Raw("Truncate table carts")
 	return newpo
 }
 

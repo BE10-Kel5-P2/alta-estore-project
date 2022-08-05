@@ -8,9 +8,9 @@ import (
 	"github.com/midtrans/midtrans-go/snap"
 )
 
-func InitConnection() snap.Client {
+func InitConnection(serverkey string) snap.Client {
 	var c = snap.Client{}
-	c.New("SB-Mid-server-RdSR7SzPE67DEllONzb7sCOX", midtrans.Sandbox)
+	c.New(serverkey, midtrans.Sandbox)
 
 	return c
 }

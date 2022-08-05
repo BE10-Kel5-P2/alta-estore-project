@@ -19,7 +19,7 @@ func main() {
 
 	e := echo.New()
 	awsConn := awss3.InitS3(cfg.Keys3, cfg.Secrets3, cfg.Regions3)
-	midConn := midtrans.InitConnection()
+	midConn := midtrans.InitConnection(cfg.Midserver)
 	factory.InitFactory(e, db, awsConn, midConn)
 
 	fmt.Println("==== STARTING PROGRAM ====")
