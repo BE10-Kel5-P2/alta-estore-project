@@ -90,3 +90,27 @@ func TestGetOrder(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestDeleteOrder(t *testing.T) {
+	repo := new(mocks.OrderData)
+
+	t.Run("Succes delete", func(t *testing.T) {
+		repo.On("DeleteOrderData", mock.Anything, mock.Anything).Return(true).Once()
+		ordercase := New(repo, snap.Client{})
+		delete, err := ordercase.DeleteOrder(1, 1)
+
+		assert.Nil(t, err)
+		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Failed delete", func(t *testing.T) {
+		repo.On("DeleteOrderData", mock.Anything, mock.Anything).Return(false).Once()
+		ordercase := New(repo, snap.Client{})
+		delete, err := ordercase.DeleteOrder(0, 0)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, false, delete)
+		repo.AssertExpectations(t)
+	})
+}
