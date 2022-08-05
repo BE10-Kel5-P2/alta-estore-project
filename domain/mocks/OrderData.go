@@ -18,9 +18,25 @@ func (_m *OrderData) DeleteOrderData() {
 	_m.Called()
 }
 
-// GetOrderData provides a mock function with given fields:
-func (_m *OrderData) GetOrderData() {
-	_m.Called()
+// GetOrderData provides a mock function with given fields: oderId
+func (_m *OrderData) GetOrderData(oderId int) (domain.ProductOrders, error) {
+	ret := _m.Called(oderId)
+
+	var r0 domain.ProductOrders
+	if rf, ok := ret.Get(0).(func(int) domain.ProductOrders); ok {
+		r0 = rf(oderId)
+	} else {
+		r0 = ret.Get(0).(domain.ProductOrders)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(oderId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // PostOrderData provides a mock function with given fields: neworder
