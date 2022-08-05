@@ -53,8 +53,15 @@ func (*orderData) DeleteOrderData() {
 }
 
 // GetOrderData implements domain.OrderData
-func (*orderData) GetOrderData() {
-	panic("unimplemented")
+func (od *orderData) GetOrderData(orderId int) (domain.ProductOrders, error) {
+	var tmp ProductOrders
+	err := od.db.Where("ID = ?", orderId).First(&tmp).Error
+	if err != nil {
+		log.Println("There is a problem with data", err.Error())
+		return domain.ProductOrders{}, err
+	}
+
+	return tmp.ToModelProductOrders(), nil
 }
 
 // PostOrderData implements domain.OrderData
