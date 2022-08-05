@@ -21,8 +21,33 @@ func New(oc domain.OrderUseCase) domain.OrderHandler {
 }
 
 // Delete implements domain.OrderHandler
-func (*orderHandler) Delete() echo.HandlerFunc {
-	panic("unimplemented")
+func (oc *orderHandler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := common.ExtractData(c)
+
+		id := c.Param("id")
+		cnv, err := strconv.Atoi(id)
+		status, err := oc.orderUseCase.DeleteOrder(data.ID, cnv)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+
+		if !status {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "Internal server error",
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "Success delete data",
+		})
+	}
 }
 
 // Get implements domain.OrderHandler

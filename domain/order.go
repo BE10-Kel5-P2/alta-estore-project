@@ -30,7 +30,7 @@ type OrderUseCase interface {
 	PostOrder(neworder Order, data []ProductOrders) (int, string)
 	Sum(neworder Order) int
 	GetOrder(orderId int) (ProductOrders, error)
-	DeleteOrder()
+	DeleteOrder(userID, productID int) (bool, error)
 }
 
 type OrderData interface {
@@ -38,5 +38,5 @@ type OrderData interface {
 	PostProductOrderData(newpo []ProductOrders) []ProductOrders
 	SumTotalPrice(neworder Order) int
 	GetOrderData(oderId int) (ProductOrders, error)
-	DeleteOrderData()
+	DeleteOrderData(userID, productID int) bool
 }

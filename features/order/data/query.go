@@ -48,8 +48,20 @@ func (od *orderData) PostProductOrderData(newpo []domain.ProductOrders) []domain
 }
 
 // DeleteOrderData implements domain.OrderData
-func (*orderData) DeleteOrderData() {
-	panic("unimplemented")
+func (od *orderData) DeleteOrderData(userID int, productID int) bool {
+	err := od.db.Where("userID = ? AND ID = ?", userID, productID).Delete(&Order{})
+
+	if err.Error != nil {
+		log.Println("cannot delete data", err.Error.Error())
+		return false
+	}
+
+	if err.RowsAffected < 1 {
+		log.Println("No content deleted", err.Error.Error())
+		return false
+	}
+	od.db.Exec("update product_orders join products on product_orders.productid = products.id set products.stock = products.stock + product_orders.quantity where product_orders.productid = 1")
+	return true
 }
 
 // GetOrderData implements domain.OrderData
