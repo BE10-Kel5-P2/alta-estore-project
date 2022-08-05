@@ -6,6 +6,7 @@ import (
 	midconn "altaproject2/utils/midtrans"
 	"testing"
 
+	"github.com/midtrans/midtrans-go/snap"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
