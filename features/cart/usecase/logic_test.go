@@ -38,6 +38,16 @@ func TestDeleteCart(t *testing.T) {
 		assert.Equal(t, true, delete)
 		repo.AssertExpectations(t)
 	})
+
+	t.Run("failed delte cart", func(t *testing.T) {
+		repo.On("DeleteData", mock.Anything, mock.Anything).Return(false).Once()
+		cartcase := New(repo, validator.New())
+		delete, err := cartcase.DeleteCart(1, 1)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, false, delete)
+		repo.AssertExpectations(t)
+	})
 }
 
 func TestCreateCart(t *testing.T) {
@@ -123,6 +133,42 @@ func TestUpdateCart(t *testing.T) {
 		status := cartcase.UpdateData(mockData, 1)
 
 		assert.Equal(t, 404, status)
+		repo.AssertExpectations(t)
+	})
+}
+
+func TestGetCart(t *testing.T) {
+	repo := new(mocks.CartData)
+	mockData := domain.Cart{Userid: 1, Subtotal: 50000, Quantity: 2, Productid: 1}
+	returnDataProduct := []domain.CartProduct{{ProductName: "men bag", Description: "this is men bag", Price: 100000, ProductPic: "bag.jpg", Stock: 5, Subtotal: 50000, Quantity: 2}}
+
+	returnData := mockData
+	returnData.ID = 1
+
+	invalidData := mockData
+	invalidData.ID = 0
+
+	t.Run("Success get data", func(t *testing.T) {
+		repo.On("GetDataProduct", mock.Anything).Return(returnDataProduct).Once()
+		repo.On("GetData", mock.Anything).Return(returnData).Once()
+		cartcase := New(repo, validator.New())
+		datacart, dataproduct, status := cartcase.GetCart(1)
+
+		assert.Equal(t, 200, status)
+		assert.Equal(t, returnDataProduct, dataproduct)
+		assert.Equal(t, returnData, datacart)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		repo.On("GetDataProduct", mock.Anything).Return(returnDataProduct).Once()
+		repo.On("GetData", mock.Anything).Return(invalidData).Once()
+		cartcase := New(repo, validator.New())
+		datacart, dataproduct, status := cartcase.GetCart(1)
+
+		assert.Equal(t, 404, status)
+		assert.Equal(t, []domain.CartProduct(nil), dataproduct)
+		assert.Equal(t, domain.Cart{}, datacart)
 		repo.AssertExpectations(t)
 	})
 }

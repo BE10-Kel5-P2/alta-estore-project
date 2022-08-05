@@ -125,7 +125,10 @@ func TestLoginUser(t *testing.T) {
 	repo := new(mocks.UserData)
 	mockData := domain.User{Username: "NotAPanda", Password: "polar"}
 	returnData := domain.User{ID: 1}
+	notfound := mockData
+	notfound.ID = 0
 	token := "sjage2w62vsdgaqsgh"
+
 	t.Run("Succes Login", func(t *testing.T) {
 		repo.On("GetPasswordData", mock.Anything).Return("$2a$10$SrMvwwY/QnQ4nZunBvGOuOm2U1w8wcAENOoAMI7l8xH7C1Vmt5mru")
 		repo.On("Login", mock.Anything).Return(returnData, token).Once()
@@ -134,6 +137,28 @@ func TestLoginUser(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Greater(t, res.ID, 0)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		repo.On("GetPasswordData", mock.Anything).Return("$2a$10$SrMvwwY/QnQ4nZunBvGOuOm2U1w8wcAENOoAMI7l8xH7C1Vmt5mru")
+		repo.On("Login", mock.Anything).Return(notfound, token).Once()
+		userUseCase := New(repo, validator.New())
+		res, err := userUseCase.Login(mockData)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, res.ID, 0)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Wrong input", func(t *testing.T) {
+		mockData.Password = ""
+		repo.On("GetPasswordData", mock.Anything).Return("$2a$10$SrMvwwY/QnQ4nZunBvGOuOm2U1w8w")
+		userUseCase := New(repo, validator.New())
+		res, err := userUseCase.Login(mockData)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, 0, res.ID)
 		repo.AssertExpectations(t)
 	})
 }
@@ -148,6 +173,16 @@ func TestDeleteUser(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Failed delete", func(t *testing.T) {
+		repo.On("Delete", mock.Anything).Return(false).Once()
+		usecase := New(repo, validator.New())
+		delete, err := usecase.Delete(1)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, false, delete)
 		repo.AssertExpectations(t)
 	})
 }
@@ -166,6 +201,19 @@ func TestGetUser(t *testing.T) {
 		assert.Equal(t, returnusercart, uc)
 		assert.Equal(t, mockData.Username, res.Username)
 		assert.Equal(t, mockData.PhotoProfile, res.PhotoProfile)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		repo.On("GetUserCartData", mock.Anything).Return(nil).Once()
+		repo.On("GetProfile", mock.Anything).Return(domain.User{}, nil).Once()
+		useCase := New(repo, validator.New())
+		res, uc, error := useCase.GetProfile(0)
+
+		assert.Nil(t, error)
+		assert.Equal(t, []domain.UserCart(nil), uc)
+		assert.Equal(t, "", res.Username)
+		assert.Equal(t, "", res.PhotoProfile)
 		repo.AssertExpectations(t)
 	})
 }

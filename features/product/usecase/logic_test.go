@@ -3,6 +3,7 @@ package usecase
 import (
 	"altaproject2/domain"
 	"altaproject2/domain/mocks"
+	"errors"
 	"testing"
 
 	"github.com/go-playground/validator/v10"
@@ -56,12 +57,30 @@ func TestPostProduct(t *testing.T) {
 	noData.ID = 0
 
 	t.Run("Success insert data", func(t *testing.T) {
-		// useCase := New(&mockUserDataTrue{})
 		repo.On("PostItemData", mock.Anything).Return(returnData).Once()
 		useCase := New(repo, validator.New())
 		res := useCase.PostItemAdmin(mockData)
 
 		assert.Equal(t, 200, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Validation error", func(t *testing.T) {
+		noData.Stock = 0
+		useCase := New(repo, validator.New())
+		res := useCase.PostItemAdmin(noData)
+
+		assert.Equal(t, 400, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Empty data", func(t *testing.T) {
+		returnData.ID = 0
+		repo.On("PostItemData", mock.Anything).Return(returnData).Once()
+		useCase := New(repo, validator.New())
+		res := useCase.PostItemAdmin(mockData)
+
+		assert.Equal(t, 404, res)
 		repo.AssertExpectations(t)
 	})
 }
@@ -80,6 +99,15 @@ func TestUpdateProduct(t *testing.T) {
 		res := useCase.UpdateItemAdmin(mockData, 1)
 
 		assert.Equal(t, 200, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		useCase := New(repo, validator.New())
+		res := useCase.UpdateItemAdmin(mockData, 0)
+
+		assert.Equal(t, 404, res)
+		repo.AssertExpectations(t)
 	})
 }
 
@@ -101,6 +129,16 @@ func TestGetProduct(t *testing.T) {
 		assert.Equal(t, mockData.Qty, res.Qty)
 		repo.AssertExpectations(t)
 	})
+
+	t.Run("data not found", func(t *testing.T) {
+		repo.On("GetItemData", mock.Anything).Return(mockData, errors.New("Error")).Once()
+		productCase := New(repo, validator.New())
+		res, error := productCase.GetItemUser(0)
+
+		assert.NotNil(t, error)
+		assert.Equal(t, domain.Product{}, res)
+		repo.AssertExpectations(t)
+	})
 }
 
 func TestDeleteProduct(t *testing.T) {
@@ -113,6 +151,16 @@ func TestDeleteProduct(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Failed delete data", func(t *testing.T) {
+		repo.On("DeleteItemData", mock.Anything).Return(false).Once()
+		productcase := New(repo, validator.New())
+		delete, err := productcase.DeleteItemAdmin(1)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, false, delete)
 		repo.AssertExpectations(t)
 	})
 }
