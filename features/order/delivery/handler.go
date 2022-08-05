@@ -5,6 +5,7 @@ import (
 	"altaproject2/features/common"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -25,8 +26,31 @@ func (*orderHandler) Delete() echo.HandlerFunc {
 }
 
 // Get implements domain.OrderHandler
-func (*orderHandler) Get() echo.HandlerFunc {
-	panic("unimplemented")
+func (oc *orderHandler) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		prd := c.Param("id")
+		id, _ := strconv.Atoi(prd)
+
+		data, err := oc.orderUseCase.GetOrder(id)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"code":    404,
+				"message": "Data not found",
+			})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"orderid":   data.Orderid,
+			"productid": data.Productid,
+			"price":     data.Price,
+			"quantity":  data.Quantity,
+			"subtotal":  data.Subtotal,
+			"status":    data.Status,
+			"payment":   data.Payment,
+			"code":      200,
+			"message":   "success get data",
+		})
+	}
 }
 
 // Post implements domain.OrderHandler

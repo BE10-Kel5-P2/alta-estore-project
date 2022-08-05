@@ -29,7 +29,7 @@ type OrderHandler interface {
 type OrderUseCase interface {
 	PostOrder(neworder Order, data []ProductOrders) (int, string)
 	Sum(neworder Order) int
-	GetOrder()
+	GetOrder(orderId int) (ProductOrders, error)
 	DeleteOrder()
 }
 
@@ -37,6 +37,6 @@ type OrderData interface {
 	PostOrderData(neworder Order) int
 	PostProductOrderData(newpo []ProductOrders) []ProductOrders
 	SumTotalPrice(neworder Order) int
-	GetOrderData()
+	GetOrderData(oderId int) (ProductOrders, error)
 	DeleteOrderData()
 }

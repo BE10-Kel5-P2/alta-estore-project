@@ -4,9 +4,11 @@ import (
 	"altaproject2/domain"
 	"altaproject2/features/order/data"
 	midconn "altaproject2/utils/midtrans"
+	"errors"
 	"log"
 
 	"github.com/midtrans/midtrans-go/snap"
+	"gorm.io/gorm"
 )
 
 type orderCase struct {
@@ -33,8 +35,19 @@ func (*orderCase) DeleteOrder() {
 }
 
 // GetOrder implements domain.OrderUseCase
-func (*orderCase) GetOrder() {
-	panic("unimplemented")
+func (od *orderCase) GetOrder(orderId int) (domain.ProductOrders, error) {
+	data, err := od.orderData.GetOrderData(orderId)
+
+	if err != nil {
+		log.Println("Use case", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return domain.ProductOrders{}, errors.New("data not found")
+		} else {
+			return domain.ProductOrders{}, errors.New("server error")
+		}
+	}
+
+	return data, nil
 }
 
 // PostOrder implements domain.OrderUseCase

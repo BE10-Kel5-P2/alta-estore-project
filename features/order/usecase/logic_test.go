@@ -68,3 +68,25 @@ func TestSumCart(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestGetOrder(t *testing.T) {
+	repo := new(mocks.OrderData)
+
+	mockData := domain.ProductOrders{ID: 1, Orderid: 1, Productid: 1, Price: 50000, Quantity: 2, Subtotal: 100000, Status: 0, Payment: "payment"}
+
+	t.Run("success get data", func(t *testing.T) {
+		repo.On("GetOrderData", mock.Anything).Return(mockData, nil).Once()
+		orderCase := New(repo, snap.Client{})
+		res, error := orderCase.GetOrder(1)
+
+		assert.Nil(t, error)
+		assert.Equal(t, mockData.Orderid, res.Orderid)
+		assert.Equal(t, mockData.Productid, res.Productid)
+		assert.Equal(t, mockData.Price, res.Price)
+		assert.Equal(t, mockData.Quantity, res.Quantity)
+		assert.Equal(t, mockData.Subtotal, res.Subtotal)
+		assert.Equal(t, mockData.Status, res.Status)
+		assert.Equal(t, mockData.Payment, res.Payment)
+		repo.AssertExpectations(t)
+	})
+}
