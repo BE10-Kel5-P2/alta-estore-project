@@ -39,5 +39,4 @@ type OrderData interface {
 	SumTotalPrice(neworder Order) int
 	GetOrderData(oderId int) (ProductOrders, error)
 	DeleteOrderData(userID, productID int) bool
-	AddStock(OrderID int) bool
 }

@@ -13,9 +13,25 @@ type OrderUseCase struct {
 	mock.Mock
 }
 
-// DeleteOrder provides a mock function with given fields:
-func (_m *OrderUseCase) DeleteOrder() {
-	_m.Called()
+// DeleteOrder provides a mock function with given fields: userID, productID
+func (_m *OrderUseCase) DeleteOrder(userID int, productID int) (bool, error) {
+	ret := _m.Called(userID, productID)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(int, int) bool); ok {
+		r0 = rf(userID, productID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int, int) error); ok {
+		r1 = rf(userID, productID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetOrder provides a mock function with given fields: orderId
