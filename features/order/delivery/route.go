@@ -18,4 +18,5 @@ func RouteOrder(e *echo.Echo, oh domain.OrderHandler) {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.POST("/orders", oh.Post(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/orders/:id", oh.Delete(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }

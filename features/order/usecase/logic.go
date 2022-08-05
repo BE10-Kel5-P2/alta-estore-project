@@ -30,8 +30,14 @@ func (od *orderCase) Sum(neworder domain.Order) int {
 }
 
 // DeleteOrder implements domain.OrderUseCase
-func (*orderCase) DeleteOrder() {
-	panic("unimplemented")
+func (od *orderCase) DeleteOrder(userID int, productId int) (bool, error) {
+	res := od.orderData.DeleteOrderData(userID, productId)
+
+	if !res {
+		return false, errors.New("failed delete data")
+	}
+	return true, nil
+
 }
 
 // GetOrder implements domain.OrderUseCase

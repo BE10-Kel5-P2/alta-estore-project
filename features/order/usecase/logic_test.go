@@ -71,12 +71,13 @@ func TestSumCart(t *testing.T) {
 
 func TestGetOrder(t *testing.T) {
 	repo := new(mocks.OrderData)
+	snap := midconn.InitConnection("SB-Mid-server-RdSR7SzPE67DEllONzb7sCOX")
 
 	mockData := domain.ProductOrders{ID: 1, Orderid: 1, Productid: 1, Price: 50000, Quantity: 2, Subtotal: 100000, Status: 0, Payment: "payment"}
 
 	t.Run("success get data", func(t *testing.T) {
 		repo.On("GetOrderData", mock.Anything).Return(mockData, nil).Once()
-		orderCase := New(repo, snap.Client{})
+		orderCase := New(repo, snap)
 		res, error := orderCase.GetOrder(1)
 
 		assert.Nil(t, error)
@@ -87,6 +88,31 @@ func TestGetOrder(t *testing.T) {
 		assert.Equal(t, mockData.Subtotal, res.Subtotal)
 		assert.Equal(t, mockData.Status, res.Status)
 		assert.Equal(t, mockData.Payment, res.Payment)
+		repo.AssertExpectations(t)
+	})
+}
+
+func TestDeleteOrder(t *testing.T) {
+	repo := new(mocks.OrderData)
+	snap := midconn.InitConnection("SB-Mid-server-RdSR7SzPE67DEllONzb7sCOX")
+
+	t.Run("Succes delete", func(t *testing.T) {
+		repo.On("DeleteOrderData", mock.Anything, mock.Anything).Return(true).Once()
+		ordercase := New(repo, snap)
+		delete, err := ordercase.DeleteOrder(1, 1)
+
+		assert.Nil(t, err)
+		assert.Equal(t, true, delete)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Failed delete", func(t *testing.T) {
+		repo.On("DeleteOrderData", mock.Anything, mock.Anything).Return(false).Once()
+		ordercase := New(repo, snap)
+		delete, err := ordercase.DeleteOrder(0, 0)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, false, delete)
 		repo.AssertExpectations(t)
 	})
 }

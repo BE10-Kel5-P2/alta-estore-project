@@ -13,9 +13,18 @@ type OrderData struct {
 	mock.Mock
 }
 
-// DeleteOrderData provides a mock function with given fields:
-func (_m *OrderData) DeleteOrderData() {
-	_m.Called()
+// DeleteOrderData provides a mock function with given fields: userID, productID
+func (_m *OrderData) DeleteOrderData(userID int, productID int) bool {
+	ret := _m.Called(userID, productID)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(int, int) bool); ok {
+		r0 = rf(userID, productID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
 }
 
 // GetOrderData provides a mock function with given fields: oderId
